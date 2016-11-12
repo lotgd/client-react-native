@@ -31,81 +31,24 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSAppTransportSecurity</key>
+	<!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
-	<key>UIStatusBarHidden</key>
-	<true/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Lato-Bold.ttf</string>
-		<string>Lato-Italic.ttf</string>
-		<string>Lato-Light.ttf</string>
-		<string>Lato-LightItalic.ttf</string>
-		<string>Lato-Regular.ttf</string>
-		<string>Lato-RegularItalic.ttf</string>
-	</array>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
-  <key>NSAppTransportSecurity</key>
-  <dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-    <key>NSExceptionDomains</key>
-    <dict>
-      <key>facebook.com</key>
-      <dict>
-        <key>NSIncludesSubdomains</key>
-        <true/>
-        <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-        <false/>
-      </dict>
-      <key>fbcdn.net</key>
-      <dict>
-        <key>NSIncludesSubdomains</key>
-        <true/>
-        <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-        <false/>
-      </dict>
-      <key>akamaihd.net</key>
-      <dict>
-        <key>NSIncludesSubdomains</key>
-        <true/>
-        <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-        <false/>
-      </dict>
-    </dict>
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>fb650289695109056</string>
-        </array>
-      </dict>
-    </array>
-  </dict>
-  <key>FacebookAppID</key>
-  <string>650289695109056</string>
-  <key>FacebookDisplayName</key>
-  <string>Legend of the Green Dragon</string>
-  <key>NSAppTransportSecurity</key>
-  <dict>
-    <!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-  </dict>
 </dict>
 </plist>

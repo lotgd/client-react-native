@@ -1,11 +1,21 @@
 'use strict';
-import React, {
+import React, { Component } from 'react';
+import {
   AppRegistry,
-  Component,
   Navigator,
+  View,
 } from 'react-native';
 
-var Login = require('./app/components/Login');
+import HeadsUpDisplay from './app/components/HeadsUpDisplay';
+import HotKeyboard from './app/components/HotKeyboard';
+
+var SceneContent = React.createClass({
+    render() {
+        return (
+            <View/>
+        );
+    }
+});
 
 class LotGD extends Component {
   render() {
@@ -15,6 +25,24 @@ class LotGD extends Component {
         renderScene={function f(route, navigator) {
           switch (route.uri) {
             case 'lotgd://app/bootstrap':
+              return (
+                  <View style={{flex: 1}}>
+                    <SceneContent
+
+                    />
+                    <HeadsUpDisplay
+                      values={{
+                        'HP': '19/20',
+                        'TURNS': '13',
+                        'GOLD': '158',
+                        'EXP': '519/1000',
+                      }}/>
+                    <HotKeyboard
+                      keys={['n', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']}
+                      onPress={function(k) {console.log(k);}}/>
+                  </View>
+              );
+              break;
             case 'lotgd://app/login':
               return (
                 <Login/>

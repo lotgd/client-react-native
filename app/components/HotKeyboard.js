@@ -1,13 +1,12 @@
 'use strict';
 
-var React = require('react-native');
-
-var {
-	StyleSheet,
+import React, { Component } from 'react';
+import {
+  StyleSheet,
   Text,
+  TouchableOpacity,
   View,
-  TouchableOpacity
-} = React;
+} from 'react-native';
 
 var HotKeyboard = React.createClass({
   render: function() {
@@ -51,7 +50,6 @@ const styles = StyleSheet.create({
   },
   hotkey: {
     textAlign: 'center',
-    fontFamily: 'Lato',
   },
   key: {
     justifyContent: 'center',

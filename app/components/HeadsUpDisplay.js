@@ -1,12 +1,11 @@
 'use strict';
 
-var React = require('react-native');
-
-var {
-	StyleSheet,
+import React, { Component } from 'react';
+import {
+  StyleSheet,
   Text,
   View,
-} = React;
+} from 'react-native';
 
 var HeadsUpDisplay = React.createClass({
   render: function() {
@@ -58,14 +57,12 @@ const styles = StyleSheet.create({
 
   hudValue: {
     color: '#787878',
-    fontFamily: 'Lato',
     fontSize: 14,
   },
 
   hudLabel: {
     marginLeft: 2,
     color: '#787878',
-    fontFamily: 'Lato-Light',
     fontSize: 12,
   }
 });
