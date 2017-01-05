@@ -16,17 +16,13 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'Username',
-      password: 'Password'
+      username: '',
+      password: ''
     };
   }
 
-  onLogin() {
-    // SessionManager.loginToFacebook()
-    //               .catch(LotGDActions.addBanner('Something went wrong with login to Facebook.', 'error'))
-    //               .then(SessionManager.loginToNexus())
-    //               .catch(LotGDActions.addBanner('Something went wrong with login to the LotGD server.', 'error'))
-    //               .then(this.props.navigator.resetTo('lotgd://app/home'));
+  onLogin = () => {
+    console.warn(this.state.username);
   }
 
   render() {
@@ -34,14 +30,15 @@ class Login extends Component {
       <RootView>
         <View style={styles.container}>
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={(username) => this.setState({username})}
-            value={this.state.username}
+            style={styles.inputBox}
+            onChangeText={(username) => this.setState({username: username})}
+            placeholder='Username'
           />
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
+            style={styles.inputBox}
+            secureTextEntry={true}
+            onChangeText={(password) => this.setState({password: password})}
+            placeholder='Password'
           />
 
           <TouchableHighlight onPress={this.onLogin} style={styles.loginContainer}>
@@ -65,12 +62,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#787878',
-    marginBottom: 15,
-    marginLeft: 52,
-    marginRight: 52,
+  inputBox: {
+    height: 40,
+    paddingLeft: 10,
   },
   loginContent: {
     flexDirection: 'row',
@@ -84,10 +78,5 @@ const styles = StyleSheet.create({
   },
   loginContainerText: {
     color: 'white',
-  },
-  loginFBIcon: {
-    width: 18,
-    height: 18,
-    marginRight: 10,
   },
 });
