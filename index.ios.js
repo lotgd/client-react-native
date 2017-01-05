@@ -8,6 +8,7 @@ import {
 
 import HeadsUpDisplay from './app/components/HeadsUpDisplay';
 import HotKeyboard from './app/components/HotKeyboard';
+import Login from './app/components/Login';
 
 var SceneContent = React.createClass({
     render() {
@@ -21,7 +22,7 @@ class LotGD extends Component {
   render() {
     return (
       <Navigator
-        initialRoute={{uri: 'lotgd://app/bootstrap', index: 0}}
+        initialRoute={{uri: 'lotgd://app/login', index: 0}}
         renderScene={function f(route, navigator) {
           switch (route.uri) {
             case 'lotgd://app/bootstrap':

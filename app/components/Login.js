@@ -1,46 +1,53 @@
 'use strict';
-import React, {
-  Component,
+import React, { Component } from 'react';
+import {
   StyleSheet,
   Text,
   View,
   Image,
+  TextInput,
   TouchableHighlight,
 } from 'react-native';
 
 var RootView = require('./RootView');
-var SessionManager = require('../stores/SessionManager');
 var LotGDActions = require('../actions/LotGDActions');
 
-var Login = React.createClass({
-  onLogin: function() {
-    if (Math.random() > .5) {
-      LotGDActions.addBanner('Something informational', 'info');
-    } else {
-      LotGDActions.addBanner('Something went wrong with login to Facebook.', 'error');
-    }
-    return;
-    SessionManager.loginToFacebook()
-                  .catch(LotGDActions.addBanner('Something went wrong with login to Facebook.', 'error'))
-                  .then(SessionManager.loginToNexus())
-                  .catch(LotGDActions.addBanner('Something went wrong with login to the LoGD server.', 'error'))
-                  .then(this.props.navigator.resetTo('lotgd://app/home'));
-  },
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: 'Username',
+      password: 'Password'
+    };
+  }
 
-  render: function() {
+  onLogin() {
+    // SessionManager.loginToFacebook()
+    //               .catch(LotGDActions.addBanner('Something went wrong with login to Facebook.', 'error'))
+    //               .then(SessionManager.loginToNexus())
+    //               .catch(LotGDActions.addBanner('Something went wrong with login to the LotGD server.', 'error'))
+    //               .then(this.props.navigator.resetTo('lotgd://app/home'));
+  }
+
+  render() {
     return (
       <RootView>
         <View style={styles.container}>
-          <Text style={styles.instructions}>
-            A red-headed young man stops you at the gate.
-            Asking for your papers, he assures you they won’t be used except
-            here at this way station. No one inside will see them.
-          </Text>
+          <TextInput
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            onChangeText={(username) => this.setState({username})}
+            value={this.state.username}
+          />
+          <TextInput
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            onChangeText={(password) => this.setState({password})}
+            value={this.state.password}
+          />
+
           <TouchableHighlight onPress={this.onLogin} style={styles.loginContainer}>
             <View style={styles.loginContent}>
-              <Image style={styles.loginFBIcon} source={require('../../assets/FB-f-Logo__white_50.png')} />
               <Text style={styles.loginContainerText}>
-                Login with Facebook
+                Login
               </Text>
             </View>
           </TouchableHighlight>
@@ -48,7 +55,7 @@ var Login = React.createClass({
       </RootView>
     );
   }
-});
+}
 
 module.exports = Login;
 

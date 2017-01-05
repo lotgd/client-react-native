@@ -1,7 +1,11 @@
 {
   "passPerPreset": true,
-    "presets": [
-      "./scripts/babelRelayPlugin",
+  "presets": [
+    {
+      "plugins": [
+        "./scripts/babelRelayPlugin"
+      ]
+    },
     "react-native"
-    ]
+  ]
 }
