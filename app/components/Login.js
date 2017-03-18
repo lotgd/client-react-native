@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   TouchableHighlight,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 var RootView = require('./RootView');
@@ -22,13 +23,13 @@ class Login extends Component {
   }
 
   onLogin = () => {
-    console.warn(this.state.username);
+    
   }
 
   render() {
     return (
       <RootView>
-        <View style={styles.container}>
+        <KeyboardAvoidingView behavior='padding' style={styles.container}>
           <TextInput
             style={styles.inputBox}
             onChangeText={(username) => this.setState({username: username})}
@@ -48,7 +49,7 @@ class Login extends Component {
               </Text>
             </View>
           </TouchableHighlight>
-        </View>
+        </KeyboardAvoidingView>
       </RootView>
     );
   }
