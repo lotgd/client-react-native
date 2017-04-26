@@ -3,22 +3,30 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "mocha --opts test/mocha.opts app/**/__specs__/*.spec.js"
   },
   "dependencies": {
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
     "invariant": "^2.2.2",
     "keymirror": "~0.1.0",
     "react": "^15.4.2",
     "react-apollo": "^1.0.0-rc.2",
     "react-native": "^0.42.2",
-    "react-native-storage": "^0.1.5",
+    "react-native-tableview-simple": "^0.16.4",
+    "react-redux": "^5.0.3",
+    "redux-persist": "^4.6.0",
     "warning": "^3.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react-native": "^1.9.1",
     "babel-relay-plugin": "^0.10.0",
+    "chai": "^3.5.0",
+    "enzyme": "^2.8.1",
     "graphql": "^0.8.2",
+    "mocha": "^3.2.0",
     "sync-request": "^3.0.1"
   }
 }

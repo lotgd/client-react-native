@@ -2,67 +2,64 @@
 'use strict';
 
 import React from 'react';
-import {
-  ApolloClient,
-  ApolloProvider,
-  createNetworkInterface
-} from 'react-apollo';
 import { AsyncStorage } from 'react-native';
-import Storage from 'react-native-storage';
+import { connect, Provider } from 'react-redux';
+import { compose, applyMiddleware, createStore } from 'redux';
+import { persistStore, autoRehydrate } from 'redux-persist';
 
-import LotGD from './LotGD';
+import reducer from './reducers';
+import LotGDNavigator from './components/LotGDNavigator';
+import RootView from './components/RootView';
+
+global._fetch = fetch;
+global.fetch = function(uri, options, ...args) {
+  return global._fetch(uri, options, ...args).then((response) => {
+    console.log('Fetch', { request: { uri, options, ...args }, response });
+    return response;
+  });
+};
 
 function setup(): ReactClass<{}> {
-  const storage = new Storage({
-    // maximum capacity, default 1000
-    size: 1000,
+  const store = createStore(
+    reducer,
+    undefined,
+    compose(
+      autoRehydrate()
+    )
+  );
 
-    // Use AsyncStorage for RN, or window.localStorage for web.
-    // If not set, data would be lost after reload.
-    storageBackend: AsyncStorage,
-
-    // expire time, default 1 day(1000 * 3600 * 24 milliseconds).
-    // can be null, which means never expire.
-    defaultExpires: null,
-
-    // cache data in the memory. default is true.
-    enableCache: true,
-  });
-
-  global.storage = storage;
-
-  const networkInterface = createNetworkInterface({
-    uri: '/graphql',
-  });
-
-  networkInterface.use([{
-    applyMiddleware(req, next) {
-      if (!req.options.headers) {
-        req.options.headers = {};  // Create the header object if needed.
-      }
-      // get the authentication token from local storage if it exists
-      storage.load({
-        key: 'token'
-      }).then(ret => {
-        req.options.headers.authorization = ret.token ? `Bearer ${ret.token}` : null;
-        next();
-      }).catch(err => {
-        console.warn(err.message);
-        next();
-      })
-    }
-  }]);
-
-  const client = new ApolloClient({
-    networkInterface,
+  // Configure redux-persist to use AsyncStorage as its backing store and
+  // begin persisting the store.
+  persistStore(store, {
+    storage: AsyncStorage,
+    // blacklist is set of reducers that don't persist/reload their state.
+    blacklist: [ 'banners' ]
   });
 
   class Root extends React.Component {
+    state: {
+      realms: Object
+    }
+
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        realms: store.getState().realms
+      };
+    }
+
     render() {
+      // If there aren't any realms, then start the user on the add realms
+      // screen.
+      const initialRouteStack = Object.keys(this.state.realms).length > 0 ?
+        [{ uri: 'lotgd://app/home' }] :
+        [{ uri: 'lotgd://app/home' },
+         { uri: 'lotgd://app/realm/add' }];
       return (
-        <ApolloProvider client={client}>
-          <LotGD />
-        </ApolloProvider>
+        <Provider store={store}>
+          <LotGDNavigator initialRouteStack={initialRouteStack}/>
+        </Provider>
       );
     }
   }
@@ -70,4 +67,4 @@ function setup(): ReactClass<{}> {
   return Root;
 }
 
-module.exports = setup;
+export default setup;

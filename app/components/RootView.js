@@ -1,47 +1,28 @@
 'use strict';
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   StyleSheet,
   View,
+  StatusBar,
 } from 'react-native';
-
-var BannerView = require('./BannerView');
-var BannerStore = require('../stores/BannerStore');
-
-function getRootState() {
-  return {
-    banners: BannerStore.getAll()
-  };
-}
-
-var RootView = React.createClass({
-  getInitialState: function() {
-    return getRootState();
-  },
-
-  componentDidMount: function() {
-    BannerStore.addChangeListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    BannerStore.removeChangeListener(this._onChange);
-  },
-
-  render: function() {
+import { connect } from 'react-redux'
+  
+class RootView extends Component {
+  render() {
     return (
       <View style={styles.container}>
-        <BannerView banners={this.state.banners}/>
+        <StatusBar hidden={true} />
         {this.props.children}
       </View>
     );
-  },
-
-  _onChange: function() {
-    this.setState(getRootState());
   }
+}
+
+const mapStateToProps = (state) => ({
+  banners: state.banners
 });
 
-module.exports = RootView;
+export default RootView;
 
 const styles = StyleSheet.create({
   container: {

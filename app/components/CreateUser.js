@@ -13,19 +13,21 @@ import { gql, graphql } from 'react-apollo';
 
 import RootView from './RootView';
 
-class Login extends Component {
+class CreateUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: '',
       email: '',
-      password: ''
+      password: '',
     };
   }
 
-  onLogin = () => {
+  onSignup = () => {
     this.props.mutate({
       variables: {
         input: {
+          name: this.state.name,
           email: this.state.email,
           password: this.state.password,
           clientMutationId: 'mutationId'
@@ -33,23 +35,13 @@ class Login extends Component {
       }
     }).then(({ data }) => {
       console.log('got data', data);
-
-      const session = data['authWithPassword']['session'];
-      let sessionSave = global.storage.save({
-        key: 'session',
-        rawData: session
-      });
-
-      return sessionSave;
-    }).then(() => {
-      this.props.navigator.resetTo('lotgd://app/home');
     }).catch((error) => {
-      console.log('there was an error logging in:', error);
+      console.log('there was an error sending the query', error);
     });
   }
 
-  onSwitchToSignup = () => {
-    this.props.navigator.resetTo({ uri: 'lotgd://app/realm/create-user' });
+  onSwitchToLogin = () => {
+    this.props.navigator.resetTo({ uri: 'lotgd://app/login' });
   }
 
   render() {
@@ -58,7 +50,16 @@ class Login extends Component {
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
           <TextInput
             style={styles.inputBox}
+            onChangeText={(name) => this.setState({name: name})}
+            autoCorrect={false}
+            autoCapitalize='none'
+            placeholder='Username'
+          />
+          <TextInput
+            style={styles.inputBox}
             onChangeText={(email) => this.setState({email: email})}
+            keyboardType='email-address'
+            autoCapitalize='none'
             placeholder='Email'
           />
           <TextInput
@@ -67,16 +68,16 @@ class Login extends Component {
             onChangeText={(password) => this.setState({password: password})}
             placeholder='Password'
           />
-          <TouchableHighlight onPress={this.onSwitchToSignup}>
+          <TouchableHighlight onPress={this.onSwitchToLogin}>
             <Text>
-              Don't have an account? Signup.
+              Already have an account? Login instead.
             </Text>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={this.onLogin} style={styles.loginContainer}>
+          <TouchableHighlight onPress={this.onSignup} style={styles.loginContainer}>
             <View style={styles.loginContent}>
               <Text style={styles.loginContainerText}>
-                Login
+                Signup
               </Text>
             </View>
           </TouchableHighlight>
@@ -86,24 +87,16 @@ class Login extends Component {
   }
 }
 
-const loginMutation = gql`
-  mutation AuthWithPasswordMutation($input: AuthWithPasswordInput!) {
-    authWithPassword(input: $input) {
-      session {
-          apiKey,
-          expiresAt,
-          user {
-              id,
-              name
-          }
-      },
+const createPasswordUser = gql`
+  mutation createPasswordUser($input: CreatePasswordUserInput!) {
+    createPasswordUser(input: $input) {
       clientMutationId
     }
   }
 `;
-const LoginWithData = graphql(loginMutation)(Login);
+const CreateUserWithData = graphql(createPasswordUser)(CreateUser);
 
-module.exports = LoginWithData;
+module.exports = CreateUserWithData;
 
 const styles = StyleSheet.create({
   container: {

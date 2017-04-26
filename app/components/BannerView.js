@@ -1,5 +1,5 @@
 'use strict';
-import React from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -53,7 +53,7 @@ var BannerView = React.createClass({
         return null;
       }
       return (
-        <Text key={b.id} style={styles[b['type']]}>{b.text}</Text>
+        <Text key={k} style={styles[b['type']]}>{b.text}</Text>
       );
     });
     return (
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = BannerView;
+export default BannerView;
