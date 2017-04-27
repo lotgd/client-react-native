@@ -42,7 +42,9 @@ class Home extends Component {
     const _cellsForCharacters = (characters: Array<Object>) => {
       return _.map([ ...characters, CreateNewCharacterModel ], (character) => {
         return (
-          <Cell onPress={() => {
+          <Cell
+            key={character.displayName}
+            onPress={() => {
               this._onPress(character);
             }}
             cellStyle="Basic"
@@ -52,10 +54,12 @@ class Home extends Component {
       });
     };
 
-    const realms = _.map(this.props.realms, (realm) => {
+    const realms = _.map(this.props.realms, (realm, url) => {
       return (
-        <Section header={realm.name}>
-          { _cellsForCharacters(realm.characters) }
+        <Section
+          key={url}
+          header={realm.name ? realm.name : 'Unknown Realm'}>
+          { _cellsForCharacters(realm.characters ? realm.characters : []) }
         </Section>
       );
     });

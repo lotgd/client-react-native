@@ -41,7 +41,10 @@ class CreateUser extends Component {
   }
 
   onSwitchToLogin = () => {
-    this.props.navigator.resetTo({ uri: 'lotgd://app/login' });
+    this.props.navigator.resetTo({
+      uri: 'lotgd://app/login',
+      realm: this.props.realm
+    });
   }
 
   render() {

@@ -2,7 +2,7 @@
 'use strict';
 
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, View, Text } from 'react-native';
 import { connect, Provider } from 'react-redux';
 import { compose, applyMiddleware, createStore } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
@@ -28,39 +28,61 @@ function setup(): ReactClass<{}> {
     )
   );
 
-  // Configure redux-persist to use AsyncStorage as its backing store and
-  // begin persisting the store.
-  persistStore(store, {
-    storage: AsyncStorage,
-    // blacklist is set of reducers that don't persist/reload their state.
-    blacklist: [ 'banners' ]
-  });
-
   class Root extends React.Component {
     state: {
-      realms: Object
+      loading: boolean,
+      realms: ?Object
     }
 
     constructor(props) {
       super(props);
 
       this.state = {
-        realms: store.getState().realms
+        loading: true,
+        realms: null
       };
+
+      // Configure redux-persist to use AsyncStorage as its backing store and
+      // begin persisting/reading the store.
+      persistStore(
+        store,
+        {
+          storage: AsyncStorage,
+          // blacklist is set of reducers that don't persist/reload their state.
+          blacklist: [ 'banners' ]
+        },
+        () => {
+          console.log('Redux store rehydration complete');
+
+          this.setState({
+            loading: false,
+            realms: store.getState().realms
+          });
+        }
+      );
     }
 
     render() {
-      // If there aren't any realms, then start the user on the add realms
-      // screen.
-      const initialRouteStack = Object.keys(this.state.realms).length > 0 ?
-        [{ uri: 'lotgd://app/home' }] :
-        [{ uri: 'lotgd://app/home' },
-         { uri: 'lotgd://app/realm/add' }];
-      return (
-        <Provider store={store}>
-          <LotGDNavigator initialRouteStack={initialRouteStack}/>
-        </Provider>
-      );
+      if (this.state.loading) {
+        return (
+          <View>
+            <Text>Loading</Text>
+          </View>
+        );
+      } else if (this.state.realms) {
+        // If there aren't any realms, then start the user on the add realms
+        // screen.
+        const initialRoute = Object.keys(this.state.realms).length > 0 ?
+          { uri: 'lotgd://app/home' } :
+          { uri: 'lotgd://app/realm/add' };
+        return (
+          <Provider store={store}>
+            <LotGDNavigator initialRoute={initialRoute}/>
+          </Provider>
+        );
+      } else {
+        console.error('null realms object on startup');
+      }
     }
   }
 

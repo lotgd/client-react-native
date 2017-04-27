@@ -66,7 +66,7 @@ export function RealmLoader(url: string): Promise<?Object> {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      query: "{ realm { url, name, description, configuration { core { name, version }, crate { name, version } } } }"
+      query: "{ realm { name, description, configuration { core { name, version }, crate { name, version } } } }"
     })
   }).catch((e) => {
     throw new RealmNotFoundError(e.message)

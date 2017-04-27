@@ -8,45 +8,50 @@ import {
 } from 'react-native';
 
 import Login from './Login';
-//import AddRealm from './AddRealm';
 import CreateCharacter from './CreateCharacter';
 import CreateUser from './CreateUser';
 import Home from './Home';
-import AddRealm from './AddRealm';
+import RealmAdd from './RealmAdd';
 import { ApolloClient, ApolloProvider } from 'react-apollo';
 
 class LotGDNavigator extends Component {
   render() {
     return (
       <Navigator
-        initialRouteStack={this.props.initialRouteStack}
+        initialRoute={this.props.initialRoute}
         renderScene={this.renderScene}
       />
     );
   }
 
-  renderScene(route : Object, navigator : Navigator) {
-    console.log("Navigating to " + route.uri);
+  renderScene(route: Object, navigator: Navigator) {
+    console.log("Navigating to " + JSON.stringify(route));
 
     switch (route.uri) {
       case 'lotgd://app/realm/login':
         return (
-          <Login navigator={navigator}/>
+          <ApolloProvider client={route.realm.apollo}>
+            <Login
+              navigator={navigator}
+              realm={route.realm}/>
+          </ApolloProvider>
         );
       case 'lotgd://app/realm/add':
         return (
-          <AddRealm
-            navigator={navigator}
-          />
+          <RealmAdd navigator={navigator}/>
         );
       case 'lotgd://app/realm/create-character':
         return (
-          <CreateCharacter navigator={navigator}/>
+          <CreateCharacter
+            navigator={navigator}
+            realm={route.realm}/>
         );
       case 'lotgd://app/realm/create-user':
         return (
           <ApolloProvider client={route.realm.apollo}>
-            <CreateUser navigator={navigator}/>
+            <CreateUser
+              navigator={navigator}
+              realm={route.realm}/>
           </ApolloProvider>
         );
       case 'lotgd://app/home':

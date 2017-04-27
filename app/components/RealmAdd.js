@@ -57,27 +57,33 @@ class RealmAdd extends Component {
       return;
     }
 
+    var url = this.state.url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'http://' + url;
+    }
+
+    // TODO: need to handle the case when we should be connecting over https
+    // instead of guessing http
+
     // Sanity check first: verify there's really a Daenerys server at
     // the other end of this URL.
-    // TODO: clean up url.
-    RealmLoader(this.state.url).then((realm) => {
+    RealmLoader(url).then((realm) => {
       if (realm) {
         console.log("Adding realm: " + JSON.stringify(realm));
 
         // Create the Apollo client and bind it to the realm.
-        const boundRealm = RealmBindApollo(this.state.url, realm);
+        const boundRealm = RealmBindApollo(url, realm);
 
         // Save the realm in our state.
         this.props.dispatch({
           type: ActionTypes.REALM_ADD,
-          url: this.state.url,
+          url: url,
           realm: boundRealm,
         });
 
-        // Navigate 
+        // For now, just navigate to the home screen.
         this.props.navigator.replace({
-          uri: 'lotgd://app/realm/create-user',
-          realm: realm
+          uri: 'lotgd://app/home'
         });
       } else {
         this.setState({
@@ -88,7 +94,7 @@ class RealmAdd extends Component {
         loading: false,
       });
     }).catch((error) => {
-      console.log('Error checking compatibility of ' + (this.state.url ? this.state.url : 'null') + ': ' + error);
+      console.log('Error checking compatibility of ' + (url ? url : 'null') + ': ' + error);
 
       if (error instanceof RealmNotCompatibleError) {
         this.setState({
