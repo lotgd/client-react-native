@@ -42,9 +42,11 @@ class LotGDNavigator extends Component {
         );
       case 'lotgd://app/realm/create-character':
         return (
-          <CreateCharacter
-            navigator={navigator}
-            realm={route.realm}/>
+          <ApolloProvider client={route.realm.apollo}>
+            <CreateCharacter
+              navigator={navigator}
+              realm={route.realm}/>
+          </ApolloProvider>
         );
       case 'lotgd://app/realm/create-user':
         return (

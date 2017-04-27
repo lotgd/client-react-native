@@ -32,7 +32,7 @@ class Home extends Component {
   _onPress = (model: Object) => {
     // TODO: move this to a callback
     if (model.id == CreateNewCharacterModel.id) {
-      this.props.navigator.push({ uri: 'lotgd://app/realm/new-character', session: this.props.session });
+      this.props.navigator.push({ uri: 'lotgd://app/realm/create-character', session: this.props.session });
     } else {
       // TODO: navigate to the game
     }
