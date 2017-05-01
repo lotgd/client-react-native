@@ -6,13 +6,14 @@ import {
   Navigator,
   View,
 } from 'react-native';
+import util from 'util';
+import { ApolloClient, ApolloProvider } from 'react-apollo';
 
 import Login from './Login';
 import CreateCharacter from './CreateCharacter';
 import CreateUser from './CreateUser';
 import Home from './Home';
 import RealmAdd from './RealmAdd';
-import { ApolloClient, ApolloProvider } from 'react-apollo';
 
 class LotGDNavigator extends Component {
   render() {
@@ -25,7 +26,7 @@ class LotGDNavigator extends Component {
   }
 
   renderScene(route: Object, navigator: Navigator) {
-    console.log("Navigating to " + JSON.stringify(route));
+    console.log("Navigating to " + util.inspect(route));
 
     switch (route.uri) {
       case 'lotgd://app/realm/login':

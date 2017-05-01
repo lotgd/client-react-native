@@ -3,7 +3,7 @@
 
 import { combineReducers } from 'redux';
 import realms from './realms';
-import banners from './realms';
+import banners from './banners';
 
 // Each of these reducers is a function that processes changes to the app state.
 // They are named to correspond with the keys within the state object, so
@@ -11,7 +11,7 @@ import banners from './realms';
 // See http://redux.js.org/docs/recipes/reducers/UsingCombineReducers.html
 const rootReducer = combineReducers({
   realms,
-  banners
+  banners,
 });
 
 export default rootReducer;

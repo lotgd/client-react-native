@@ -10,8 +10,11 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { gql, graphql } from 'react-apollo';
+import _ from 'lodash';
+import { connect } from 'react-redux';
 
 import RootView from './RootView';
+import ActionTypes from '../constants/ActionTypes';
 
 class Login extends Component {
   constructor(props) {
@@ -32,24 +35,23 @@ class Login extends Component {
         }
       }
     }).then(({ data }) => {
-      console.log('got data', data);
+      console.log('Got login data:', data);
 
       const session = data['authWithPassword']['session'];
-      let sessionSave = global.storage.save({
-        key: 'session',
-        rawData: session
+      this.props.dispatch({
+        type: ActionTypes.REALM_LOGIN,
+        url: this.props.realm.url,
+        session: session,
       });
 
-      return sessionSave;
-    }).then(() => {
-      this.props.navigator.resetTo('lotgd://app/home');
+      this.props.navigator.resetTo({ uri: 'lotgd://app/home' });
     }).catch((error) => {
-      console.log('there was an error logging in:', error);
+      console.log('Error logging in:', error);
     });
   }
 
   onSwitchToSignup = () => {
-    this.props.navigator.resetTo({ uri: 'lotgd://app/realm/create-user' });
+    this.props.navigator.replace({ uri: 'lotgd://app/realm/create-user', realm: this.props.realm });
   }
 
   render() {
@@ -58,13 +60,15 @@ class Login extends Component {
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
           <TextInput
             style={styles.inputBox}
-            onChangeText={(email) => this.setState({email: email})}
+            onChangeText={(email) => this.setState({ email: _.trim(email).toLowerCase() })}
             placeholder='Email'
+            keyboardType='email-address'
+            autoCapitalize='none'
           />
           <TextInput
             style={styles.inputBox}
             secureTextEntry={true}
-            onChangeText={(password) => this.setState({password: password})}
+            onChangeText={(password) => this.setState({ password: password })}
             placeholder='Password'
           />
           <TouchableHighlight onPress={this.onSwitchToSignup}>
@@ -101,9 +105,8 @@ const loginMutation = gql`
     }
   }
 `;
-const LoginWithData = graphql(loginMutation)(Login);
 
-module.exports = LoginWithData;
+module.exports = connect()(graphql(loginMutation)(Login));
 
 const styles = StyleSheet.create({
   container: {

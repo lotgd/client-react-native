@@ -17,10 +17,12 @@ import {
 } from 'react-native-tableview-simple';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import util from 'util';
 
 import RootView  from './RootView';
 
 const CreateNewCharacterModel = { displayName: 'Create new character...', id: '-1' };
+const LoginModel = { displayName: 'Login or Sign Up', id: '-2' };
 
 class Home extends Component {
   _onAddRealm = () => {
@@ -29,29 +31,50 @@ class Home extends Component {
     });
   }
 
-  _onPress = (model: Object) => {
+  _onPress = (model: Object, realm: Object) => {
     // TODO: move this to a callback
     if (model.id == CreateNewCharacterModel.id) {
-      this.props.navigator.push({ uri: 'lotgd://app/realm/create-character', session: this.props.session });
+      this.props.navigator.push({ uri: 'lotgd://app/realm/create-character', realm: realm });
+    } else if (model.id == LoginModel.id) {
+        this.props.navigator.push({ uri: 'lotgd://app/realm/create-user', realm: realm });
     } else {
       // TODO: navigate to the game
     }
   }
 
   render() {
-    const _cellsForCharacters = (characters: Array<Object>) => {
-      return _.map([ ...characters, CreateNewCharacterModel ], (character) => {
+    const _characterCellsForRealm = (realm) => {
+      if (realm._session) {
+        const characterModels = [
+          ..._.map(realm.characters ? realm.characters : {}, (c) => {
+            return c;
+          }),
+          CreateNewCharacterModel,
+        ];
+        return _.map(characterModels, (character) => {
+          return (
+            <Cell
+              key={character.displayName}
+              onPress={() => {
+                this._onPress(character, realm);
+              }}
+              cellStyle="Basic"
+              title={character.displayName}
+            />
+          );
+        });
+      } else {
         return (
           <Cell
-            key={character.displayName}
+            key={LoginModel.displayName}
             onPress={() => {
-              this._onPress(character);
+              this._onPress(LoginModel, realm);
             }}
             cellStyle="Basic"
-            title={character.displayName}
+            title={LoginModel.displayName}
           />
         );
-      });
+      }
     };
 
     const realms = _.map(this.props.realms, (realm, url) => {
@@ -59,7 +82,7 @@ class Home extends Component {
         <Section
           key={url}
           header={realm.name ? realm.name : 'Unknown Realm'}>
-          { _cellsForCharacters(realm.characters ? realm.characters : []) }
+          { _characterCellsForRealm(realm) }
         </Section>
       );
     });

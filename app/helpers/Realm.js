@@ -19,7 +19,7 @@ function verifyStatus(response): Promise<Object> {
 
 function verifyGraphQLResponse(response): Promise<Object> {
   if (_.has(response, 'data.realm.configuration.crate.version')) {
-    return Promise.resolve({ realm: response.data.realm });
+    return Promise.resolve(response.data.realm);
   } else {
     throw new RealmNotCompatibleError('Realm not compatible: GraphQL response lacks a crate version');
   }
@@ -37,7 +37,9 @@ export function RealmBindApollo(url: string, realm: Object): Object {
       if (!req.options.headers) {
           req.options.headers = {};  // Create the header object if needed.
       }
-      req.options.headers.token = realm.session.apiKey ? realm.session.apiKey : null;
+      if (_.has(realm, '_session.apiKey')) {
+        req.options.headers.token = realm._session.apiKey;
+      }
       next();
     }
   }]);

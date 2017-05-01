@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "email-validator": "^1.0.7",
     "invariant": "^2.2.2",
     "keymirror": "~0.1.0",
     "react": "^15.4.2",
@@ -16,6 +17,7 @@
     "react-native-tableview-simple": "^0.16.4",
     "react-redux": "^5.0.3",
     "redux-persist": "^4.6.0",
+    "util": "^0.10.3",
     "warning": "^3.0.0"
   },
   "devDependencies": {

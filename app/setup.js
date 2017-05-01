@@ -6,6 +6,7 @@ import { AsyncStorage, View, Text } from 'react-native';
 import { connect, Provider } from 'react-redux';
 import { compose, applyMiddleware, createStore } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
+import util from 'util';
 
 import reducer from './reducers';
 import LotGDNavigator from './components/LotGDNavigator';
@@ -52,7 +53,7 @@ function setup(): ReactClass<{}> {
           blacklist: [ 'banners' ]
         },
         () => {
-          console.log('Redux store rehydration complete');
+          console.log('Redux store rehydration complete:', util.inspect(store.getState()));
 
           this.setState({
             loading: false,

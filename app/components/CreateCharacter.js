@@ -1,3 +1,4 @@
+// @flow
 'use strict';
 import React, { Component } from 'react';
 import {
@@ -10,10 +11,16 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { gql, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import RootView from './RootView';
+import ActionTypes from '../constants/ActionTypes';
 
 class CreateCharacter extends Component {
+  state: {
+    characterName: string
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,15 +32,23 @@ class CreateCharacter extends Component {
     this.props.mutate({
       variables: {
         input: {
-          userId: this.props.user.id,
+          userId: this.props.realm._session.user.id,
           characterName: this.state.characterName,
           clientMutationId: 'mutationId'
         }
       }
     }).then(({ data }) => {
-      console.log('got data', data);
+      console.log('Create character succeeded:', data);
+
+      this.props.dispatch({
+        type: ActionTypes.REALM_CHARACTER_ADD,
+        url: this.props.realm.url,
+        character: data.createCharacter.character
+      });
+
+      this.props.navigator.pop();
     }).catch((error) => {
-      console.log('there was an error sending the query', error);
+      console.log('Error sending create character query:', error);
     });
   }
 
@@ -74,9 +89,8 @@ const createCharacterMutation = gql`
     }
   }
 `;
-const CreateCharacterWithData = graphql(createCharacterMutation)(CreateCharacter);
 
-module.exports = CreateCharacterWithData;
+module.exports = connect()(graphql(createCharacterMutation)(CreateCharacter));
 
 const styles = StyleSheet.create({
   container: {

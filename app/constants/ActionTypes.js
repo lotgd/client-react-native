@@ -8,4 +8,6 @@ export default keyMirror({
   BANNER_DELETE: null,
   REALM_ADD: null,
   REALM_DELETE: null,
+  REALM_LOGIN: null,
+  REALM_CHARACTER_ADD: null,
 });

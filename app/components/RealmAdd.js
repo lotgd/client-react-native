@@ -134,7 +134,7 @@ class RealmAdd extends Component {
             keyboardType={'url'}
             autoCorrect={false}
             autoCapitalize={'none'}
-            onChangeText={(url) => this.setState({url: _.trim(url)})}
+            onChangeText={(url) => this.setState({ url: _.trim(url) })}
             placeholder='http://your.lotgdserver.com'
           />
 
