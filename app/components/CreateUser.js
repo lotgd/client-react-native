@@ -15,6 +15,7 @@ import { gql, graphql } from 'react-apollo';
 import _ from 'lodash';
 import * as EmailValidator from 'email-validator';
 import { connect } from 'react-redux';
+import { ApolloProvider } from 'react-apollo';
 
 import RootView from './RootView';
 import ActionTypes from '../constants/ActionTypes';
@@ -89,10 +90,7 @@ class CreateUser extends Component {
         }
       });
 
-      this.props.navigator.replace({
-        uri: 'lotgd://app/realm/login',
-        realm: this.props.realm,
-      });
+      this.props.navigation.navigate('Login', { realm: this.props.realm });
     }).catch((error) => {
       console.log(JSON.stringify(error));
       console.log('Error creating user: ', error);
@@ -108,54 +106,53 @@ class CreateUser extends Component {
   }
 
   onSwitchToLogin = () => {
-    this.props.navigator.resetTo({
-      uri: 'lotgd://app/realm/login',
-      realm: this.props.realm,
-    });
+    this.props.navigation.navigate('Login', { realm: this.props.realm });
   }
 
   render() {
     const errorText = this.state.error ? <Text>{ this.state.error }</Text> : null;
 
     return (
-      <RootView>
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
-          <TextInput
-            style={styles.inputBox}
-            onChangeText={(name) => this.setState({name: name})}
-            autoCorrect={false}
-            autoCapitalize='none'
-            placeholder='Username'
-          />
-          <TextInput
-            style={styles.inputBox}
-            onChangeText={(email) => this.setState({email: email})}
-            keyboardType='email-address'
-            autoCapitalize='none'
-            placeholder='Email'
-          />
-          <TextInput
-            style={styles.inputBox}
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({password: password})}
-            placeholder='Password'
-          />
-          { errorText }
-          <TouchableHighlight onPress={this.onSwitchToLogin}>
-            <Text>
-              Already have an account? Login instead.
-            </Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={this.onSignup} style={styles.loginContainer}>
-            <View style={styles.loginContent}>
-              <Text style={styles.loginContainerText}>
-                Signup
+      <ApolloProvider client={this.props.realm.apollo}>
+        <RootView>
+          <KeyboardAvoidingView behavior='padding' style={styles.container}>
+            <TextInput
+              style={styles.inputBox}
+              onChangeText={(name) => this.setState({name: name})}
+              autoCorrect={false}
+              autoCapitalize='none'
+              placeholder='Username'
+            />
+            <TextInput
+              style={styles.inputBox}
+              onChangeText={(email) => this.setState({email: email})}
+              keyboardType='email-address'
+              autoCapitalize='none'
+              placeholder='Email'
+            />
+            <TextInput
+              style={styles.inputBox}
+              secureTextEntry={true}
+              onChangeText={(password) => this.setState({password: password})}
+              placeholder='Password'
+            />
+            { errorText }
+            <TouchableHighlight onPress={this.onSwitchToLogin}>
+              <Text>
+                Already have an account? Login instead.
               </Text>
-            </View>
-          </TouchableHighlight>
-        </KeyboardAvoidingView>
-      </RootView>
+            </TouchableHighlight>
+
+            <TouchableHighlight onPress={this.onSignup} style={styles.loginContainer}>
+              <View style={styles.loginContent}>
+                <Text style={styles.loginContainerText}>
+                  Signup
+                </Text>
+              </View>
+            </TouchableHighlight>
+          </KeyboardAvoidingView>
+        </RootView>
+      </ApolloProvider>
     );
   }
 }
@@ -168,7 +165,27 @@ const createPasswordUser = gql`
   }
 `;
 
-module.exports = connect()(graphql(createPasswordUser)(CreateUser));
+const WrappedCreateUser = connect()(graphql(createPasswordUser)(CreateUser));
+
+class CreateUserNavigatorShim extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Create User',
+  });
+
+  render() {
+    return (
+      <ApolloProvider client={this.props.navigation.state.params.realm.apollo}>
+        <WrappedCreateUser
+          {...this.props}
+          realm={this.props.navigation.state.params.realm}
+          navigation={this.props.navigation}
+        />
+      </ApolloProvider>
+    );
+  }
+}
+
+module.exports = CreateUserNavigatorShim;
 
 const styles = StyleSheet.create({
   container: {

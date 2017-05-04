@@ -12,6 +12,8 @@ import {
 import { gql, graphql } from 'react-apollo';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
+import { ApolloProvider } from 'react-apollo';
 
 import RootView from './RootView';
 import ActionTypes from '../constants/ActionTypes';
@@ -44,48 +46,56 @@ class Login extends Component {
         session: session,
       });
 
-      this.props.navigator.resetTo({ uri: 'lotgd://app/home' });
+      const action = NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Home' })
+        ]
+      });
+      this.props.navigation.dispatch(action);
     }).catch((error) => {
       console.log('Error logging in:', error);
     });
   }
 
   onSwitchToSignup = () => {
-    this.props.navigator.replace({ uri: 'lotgd://app/realm/create-user', realm: this.props.realm });
+    this.props.navigation.navigate('CreateUser', { realm: this.props.realm });
   }
 
   render() {
     return (
-      <RootView>
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
-          <TextInput
-            style={styles.inputBox}
-            onChangeText={(email) => this.setState({ email: _.trim(email).toLowerCase() })}
-            placeholder='Email'
-            keyboardType='email-address'
-            autoCapitalize='none'
-          />
-          <TextInput
-            style={styles.inputBox}
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({ password: password })}
-            placeholder='Password'
-          />
-          <TouchableHighlight onPress={this.onSwitchToSignup}>
-            <Text>
-              Don't have an account? Signup.
-            </Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={this.onLogin} style={styles.loginContainer}>
-            <View style={styles.loginContent}>
-              <Text style={styles.loginContainerText}>
-                Login
+      <ApolloProvider client={this.props.realm.apollo}>
+        <RootView>
+          <KeyboardAvoidingView behavior='padding' style={styles.container}>
+            <TextInput
+              style={styles.inputBox}
+              onChangeText={(email) => this.setState({ email: _.trim(email).toLowerCase() })}
+              placeholder='Email'
+              keyboardType='email-address'
+              autoCapitalize='none'
+            />
+            <TextInput
+              style={styles.inputBox}
+              secureTextEntry={true}
+              onChangeText={(password) => this.setState({ password: password })}
+              placeholder='Password'
+            />
+            <TouchableHighlight onPress={this.onSwitchToSignup}>
+              <Text>
+                Don't have an account? Signup.
               </Text>
-            </View>
-          </TouchableHighlight>
-        </KeyboardAvoidingView>
-      </RootView>
+            </TouchableHighlight>
+
+            <TouchableHighlight onPress={this.onLogin} style={styles.loginContainer}>
+              <View style={styles.loginContent}>
+                <Text style={styles.loginContainerText}>
+                  Login
+                </Text>
+              </View>
+            </TouchableHighlight>
+          </KeyboardAvoidingView>
+        </RootView>
+      </ApolloProvider>
     );
   }
 }
@@ -106,7 +116,27 @@ const loginMutation = gql`
   }
 `;
 
-module.exports = connect()(graphql(loginMutation)(Login));
+const WrappedLogin = connect()(graphql(loginMutation)(Login));
+
+class LoginNavigatorShim extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Login',
+  });
+
+  render() {
+    return (
+      <ApolloProvider client={this.props.navigation.state.params.realm.apollo}>
+        <WrappedLogin
+          {...this.props}
+          realm={this.props.navigation.state.params.realm}
+          navigation={this.props.navigation}
+        />
+      </ApolloProvider>
+    );
+  }
+}
+
+module.exports = LoginNavigatorShim;
 
 const styles = StyleSheet.create({
   container: {

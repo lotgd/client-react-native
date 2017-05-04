@@ -24,6 +24,10 @@ class RealmAdd extends Component {
     url: string,
   }
 
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Add Realm',
+  });
+
   constructor(props) {
     super(props);
 
@@ -82,9 +86,7 @@ class RealmAdd extends Component {
         });
 
         // For now, just navigate to the home screen.
-        this.props.navigator.replace({
-          uri: 'lotgd://app/home'
-        });
+        this.props.navigation.navigate('Home');
       } else {
         this.setState({
           connectError: "Can't seem to find a compatible server at that address.",
@@ -124,33 +126,33 @@ class RealmAdd extends Component {
 
     const connectButtonText = 'Connect' + (this.state.loading ? ' (...)' : '');
     return (
-      <RootView>
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
-          <Text>
-            Connect to a Legend of the Green Dragon compatible server.
-          </Text>
-          <TextInput
-            style={styles.inputBox}
-            keyboardType={'url'}
-            autoCorrect={false}
-            autoCapitalize={'none'}
-            onChangeText={(url) => this.setState({ url: _.trim(url) })}
-            placeholder='http://your.lotgdserver.com'
-          />
+        <RootView>
+          <KeyboardAvoidingView behavior='padding' style={styles.container}>
+            <Text>
+              Connect to a Legend of the Green Dragon compatible server.
+            </Text>
+            <TextInput
+              style={styles.inputBox}
+              keyboardType={'url'}
+              autoCorrect={false}
+              autoCapitalize={'none'}
+              onChangeText={(url) => this.setState({ url: _.trim(url) })}
+              placeholder='http://your.lotgdserver.com'
+            />
 
-          <TouchableHighlight
-            onPress={this.onConnect}
-            disabled={this.state.loading}
-            style={styles.loginContainer}>
-            <View style={styles.loginContent}>
-              <Text style={styles.loginContainerText}>
-                { connectButtonText }
-              </Text>
-            </View>
-          </TouchableHighlight>
-          { connectError }
-        </KeyboardAvoidingView>
-      </RootView>
+            <TouchableHighlight
+              onPress={this.onConnect}
+              disabled={this.state.loading}
+              style={styles.loginContainer}>
+              <View style={styles.loginContent}>
+                <Text style={styles.loginContainerText}>
+                  { connectButtonText }
+                </Text>
+              </View>
+            </TouchableHighlight>
+            { connectError }
+          </KeyboardAvoidingView>
+        </RootView>
     );
   }
 }

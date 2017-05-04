@@ -74,11 +74,14 @@ function setup(): ReactClass<{}> {
         // If there aren't any realms, then start the user on the add realms
         // screen.
         const initialRoute = Object.keys(this.state.realms).length > 0 ?
-          { uri: 'lotgd://app/home' } :
-          { uri: 'lotgd://app/realm/add' };
+          'Home' :
+          'RealmAdd';
+        const LotGDNavigatorComponent = LotGDNavigator({
+          initialRouteName: initialRoute
+        });
         return (
           <Provider store={store}>
-            <LotGDNavigator initialRoute={initialRoute}/>
+            <LotGDNavigatorComponent />
           </Provider>
         );
       } else {

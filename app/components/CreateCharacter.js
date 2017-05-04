@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { gql, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
+import { ApolloProvider } from 'react-apollo';
+import { NavigationActions } from 'react-navigation';
 
 import RootView from './RootView';
 import ActionTypes from '../constants/ActionTypes';
@@ -46,7 +48,13 @@ class CreateCharacter extends Component {
         character: data.createCharacter.character
       });
 
-      this.props.navigator.pop();
+      const action = NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate('Home')
+        ]
+      });
+      this.props.navigation.dispatch(action);
     }).catch((error) => {
       console.log('Error sending create character query:', error);
     });
@@ -54,23 +62,25 @@ class CreateCharacter extends Component {
 
   render() {
     return (
-      <RootView>
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
-          <TextInput
-            style={styles.inputBox}
-            onChangeText={(characterName) => this.setState({characterName: characterName})}
-            placeholder='Character Name'
-          />
+      <ApolloProvider client={this.props.realm.apollo}>
+        <RootView>
+          <KeyboardAvoidingView behavior='padding' style={styles.container}>
+            <TextInput
+              style={styles.inputBox}
+              onChangeText={(characterName) => this.setState({characterName: characterName})}
+              placeholder='Character Name'
+            />
 
-          <TouchableHighlight onPress={this.onCreate} style={styles.loginContainer}>
-            <View style={styles.loginContent}>
-              <Text style={styles.loginContainerText}>
-                Create Character
-              </Text>
-            </View>
-          </TouchableHighlight>
-        </KeyboardAvoidingView>
-      </RootView>
+            <TouchableHighlight onPress={this.onCreate} style={styles.loginContainer}>
+              <View style={styles.loginContent}>
+                <Text style={styles.loginContainerText}>
+                  Create Character
+                </Text>
+              </View>
+            </TouchableHighlight>
+          </KeyboardAvoidingView>
+        </RootView>
+      </ApolloProvider>
     );
   }
 }
@@ -90,7 +100,27 @@ const createCharacterMutation = gql`
   }
 `;
 
-module.exports = connect()(graphql(createCharacterMutation)(CreateCharacter));
+const WrappedCreateCharacter = connect()(graphql(createCharacterMutation)(CreateCharacter));
+
+class CreateCharacterNavigatorShim extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Create Character',
+  });
+
+  render() {
+    return (
+      <ApolloProvider client={this.props.navigation.state.params.realm.apollo}>
+        <WrappedCreateCharacter
+          {...this.props}
+          realm={this.props.navigation.state.params.realm}
+          navigation={this.props.navigation}
+        />
+      </ApolloProvider>
+    );
+  }
+}
+
+module.exports = CreateCharacterNavigatorShim;
 
 const styles = StyleSheet.create({
   container: {

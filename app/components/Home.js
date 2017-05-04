@@ -25,18 +25,20 @@ const CreateNewCharacterModel = { displayName: 'Create new character...', id: '-
 const LoginModel = { displayName: 'Login or Sign Up', id: '-2' };
 
 class Home extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Realms',
+  });
+
   _onAddRealm = () => {
-    this.props.navigator.push({
-      uri: 'lotgd://app/realm/add'
-    });
+    this.props.navigation.navigate('RealmAdd');
   }
 
   _onPress = (model: Object, realm: Object) => {
     // TODO: move this to a callback
     if (model.id == CreateNewCharacterModel.id) {
-      this.props.navigator.push({ uri: 'lotgd://app/realm/create-character', realm: realm });
+      this.props.navigation.navigate('CreateCharacter', { realm: realm });
     } else if (model.id == LoginModel.id) {
-        this.props.navigator.push({ uri: 'lotgd://app/realm/create-user', realm: realm });
+      this.props.navigation.navigate('CreateUser', { realm: realm });
     } else {
       // TODO: navigate to the game
     }
