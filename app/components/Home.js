@@ -8,6 +8,7 @@ import {
   Image,
   TextInput,
   ListView,
+  Button,
   TouchableHighlight
 } from 'react-native';
 import {
@@ -27,6 +28,11 @@ const LoginModel = { displayName: 'Login or Sign Up', id: '-2' };
 class Home extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Realms',
+    headerLeft: <Button
+                  title="Settings"
+                  onPress={() => {
+                    navigation.navigate('Settings')
+                  }}/>
   });
 
   _onAddRealm = () => {

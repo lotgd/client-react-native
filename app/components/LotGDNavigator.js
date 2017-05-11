@@ -11,6 +11,7 @@ import CreateCharacter from './CreateCharacter';
 import CreateUser from './CreateUser';
 import Home from './Home';
 import RealmAdd from './RealmAdd';
+import Settings from './Settings';
 
 // For options to pass as StackNavigatorConfig, see
 // https://reactnavigation.org/docs/navigators/stack
@@ -21,6 +22,7 @@ export default (stackNavigatorConfig: Object) => {
       CreateCharacter: { screen: CreateCharacter },
       RealmAdd: { screen: RealmAdd },
       Login: { screen: Login },
+      Settings: { screen: Settings },
     },
     stackNavigatorConfig);
 };

@@ -20,6 +20,12 @@ global.fetch = function(uri, options, ...args) {
   });
 };
 
+var persistor = null;
+
+export function purgeStorage() {
+  persistor.purge();
+}
+
 function setup(): ReactClass<{}> {
   const store = createStore(
     reducer,
@@ -45,7 +51,7 @@ function setup(): ReactClass<{}> {
 
       // Configure redux-persist to use AsyncStorage as its backing store and
       // begin persisting/reading the store.
-      persistStore(
+      persistor = persistStore(
         store,
         {
           storage: AsyncStorage,
