@@ -81,6 +81,7 @@ class Home extends Component {
             onPress={() => {
               this._onPress(LoginModel, realm);
             }}
+            accessory="DisclosureIndicator"
             cellStyle="Basic"
             title={LoginModel.displayName}
           />
@@ -97,16 +98,27 @@ class Home extends Component {
         </Section>
       );
     });
+
+    // TableView only takes an array or a single element without a warning, lolz.
+    realms.push(
+      <Section key="AddRealm">
+        <Cell
+          onPress={() => {
+            this._onAddRealm();
+          }}
+          cellStyle="Basic"
+          titleTextColor="#5291F4"
+          titleTextStyle={ { textAlign: 'center' } }
+          title="Add Realm"
+        />
+      </Section>
+    );
+
     return (
       <RootView>
         <TableView>
           { realms }
         </TableView>
-        <TouchableHighlight onPress={this._onAddRealm}>
-          <Text>
-            Add Realm
-          </Text>
-        </TouchableHighlight>
       </RootView>
     );
   }
