@@ -9,7 +9,8 @@ import {
   TextInput,
   ListView,
   Button,
-  TouchableHighlight
+  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import {
   Cell,
@@ -19,6 +20,7 @@ import {
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import util from 'util';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import RootView  from './RootView';
 
@@ -28,11 +30,12 @@ const LoginModel = { displayName: 'Login or Sign Up', id: '-2' };
 class Home extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Realms',
-    headerLeft: <Button
-                  title="Settings"
+    headerLeft: <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('Settings')
-                  }}/>
+                  }}>
+                    <Icon name="ios-settings" size={30} style={{ marginLeft: 10 }} color="#4F8EF7" />
+                </TouchableOpacity>
   });
 
   _onAddRealm = () => {
@@ -121,15 +124,6 @@ export default connect(
 )(Home);
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    padding: 10,
-    backgroundColor: '#F6F6F6',
-  },
-  thumb: {
-    width: 64,
-    height: 64,
-  },
   text: {
     flex: 1,
   }

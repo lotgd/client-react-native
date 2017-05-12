@@ -6,7 +6,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { connect } from 'react-redux'
-  
+
 class RootView extends Component {
   render() {
     return (
@@ -27,6 +27,6 @@ export default RootView;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F4F4',
+    backgroundColor: '#EFEFF4',
   },
 });
