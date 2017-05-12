@@ -11,6 +11,11 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { connect } from 'react-redux';
+import {
+  Cell,
+  Section,
+  TableView,
+} from 'react-native-tableview-simple';
 
 import ActionTypes from '../constants/ActionTypes';
 import RootView from './RootView';
@@ -124,34 +129,42 @@ class RealmAdd extends Component {
       </Text>
     ) : null;
 
-    const connectButtonText = 'Connect' + (this.state.loading ? ' (...)' : '');
     return (
         <RootView>
-          <KeyboardAvoidingView behavior='padding' style={styles.container}>
-            <Text>
-              Connect to a Legend of the Green Dragon compatible server.
-            </Text>
-            <TextInput
-              style={styles.inputBox}
-              keyboardType={'url'}
-              autoCorrect={false}
-              autoCapitalize={'none'}
-              onChangeText={(url) => this.setState({ url: _.trim(url) })}
-              placeholder='http://your.lotgdserver.com'
-            />
-
-            <TouchableHighlight
-              onPress={this.onConnect}
-              disabled={this.state.loading}
-              style={styles.loginContainer}>
-              <View style={styles.loginContent}>
-                <Text style={styles.loginContainerText}>
-                  { connectButtonText }
+          <TableView>
+            <Section
+              headerComponent={
+                <Text style={styles.header}>
+                  Connect to a Legend of the Green Dragon compatible server.
                 </Text>
-              </View>
-            </TouchableHighlight>
-            { connectError }
-          </KeyboardAvoidingView>
+              }
+              footerComponent={connectError}
+            >
+                <Cell
+                  contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
+                  cellContentView={
+                    <TextInput
+                      style={styles.inputBox}
+                      keyboardType={'url'}
+                      autoCorrect={false}
+                      autoCapitalize={'none'}
+                      onChangeText={(url) => this.setState({ url: _.trim(url) })}
+                      placeholder='http://your.lotgdserver.com'
+                    />
+                  }
+                />
+              </Section>
+              <Section>
+                <Cell
+                  onPress={this.onConnect}
+                  isDisabled={this.state.loading}
+                  cellStyle="Basic"
+                  titleTextColor="#5291F4"
+                  titleTextStyle={ { textAlign: 'center' } }
+                  title="Connect"
+                />
+            </Section>
+          </TableView>
         </RootView>
     );
   }
@@ -167,29 +180,23 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps)(RealmAdd);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+  header: {
+    color: '#787878',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 20,
+    paddingBottom: 10,
+    textAlign: 'center',
   },
   inputBox: {
-    height: 40,
-    paddingLeft: 10,
-  },
-  loginContent: {
-    flexDirection: 'row',
-  },
-  loginContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#4267B2',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: 44,
-  },
-  loginContainerText: {
-    color: 'white',
+    flex: 1,
   },
   connectError: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    textAlign: 'center',
     color: 'red',
   }
 });
