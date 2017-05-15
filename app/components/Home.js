@@ -24,8 +24,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import RootView  from './RootView';
 
-const CreateNewCharacterModel = { displayName: 'Create new character...', id: '-1' };
-const LoginModel = { displayName: 'Login or Sign Up', id: '-2' };
+const CreateNewCharacterModel = { displayName: 'Create new character', id: '-1' };
+const LoginModel = { displayName: 'Login or sign up', id: '-2' };
 
 class Home extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -70,6 +70,7 @@ class Home extends Component {
                 this._onPress(character, realm);
               }}
               cellStyle="Basic"
+              accessory="DisclosureIndicator"
               title={character.displayName}
             />
           );
