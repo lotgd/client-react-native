@@ -8,7 +8,7 @@ import {
   View,
   Image,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
 import { gql, graphql } from 'react-apollo';
@@ -16,6 +16,11 @@ import _ from 'lodash';
 import * as EmailValidator from 'email-validator';
 import { connect } from 'react-redux';
 import { ApolloProvider } from 'react-apollo';
+import {
+  Cell,
+  Section,
+  TableView,
+} from 'react-native-tableview-simple';
 
 import RootView from './RootView';
 import ActionTypes from '../constants/ActionTypes';
@@ -110,47 +115,80 @@ class CreateUser extends Component {
   }
 
   render() {
-    const errorText = this.state.error ? <Text>{ this.state.error }</Text> : null;
+    var connectError = this.state.error ? (
+      <Text style={styles.connectError}>
+        { this.state.error }
+      </Text>
+    ) : null;
 
     return (
       <ApolloProvider client={this.props.realm.apollo}>
         <RootView>
-          <KeyboardAvoidingView behavior='padding' style={styles.container}>
-            <TextInput
-              style={styles.inputBox}
-              onChangeText={(name) => this.setState({name: name})}
-              autoCorrect={false}
-              autoCapitalize='none'
-              placeholder='Username'
-            />
-            <TextInput
-              style={styles.inputBox}
-              onChangeText={(email) => this.setState({email: email})}
-              keyboardType='email-address'
-              autoCapitalize='none'
-              placeholder='Email'
-            />
-            <TextInput
-              style={styles.inputBox}
-              secureTextEntry={true}
-              onChangeText={(password) => this.setState({password: password})}
-              placeholder='Password'
-            />
-            { errorText }
-            <TouchableHighlight onPress={this.onSwitchToLogin}>
-              <Text>
-                Already have an account? Login instead.
-              </Text>
-            </TouchableHighlight>
-
-            <TouchableHighlight onPress={this.onSignup} style={styles.loginContainer}>
-              <View style={styles.loginContent}>
-                <Text style={styles.loginContainerText}>
-                  Signup
+          <TableView>
+            <Section
+              headerComponent={
+                <Text style={styles.header}>
+                  Create a user on {this.props.realm.name}.
                 </Text>
-              </View>
-            </TouchableHighlight>
-          </KeyboardAvoidingView>
+              }
+              footerComponent={connectError}
+              >
+              <Cell
+                contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
+                cellContentView={
+                  <TextInput
+                    style={styles.inputBox}
+                    keyboardType={'url'}
+                    autoCorrect={false}
+                    autoCapitalize={'none'}
+                    onChangeText={(name) => this.setState({name: name})}
+                    placeholder='Username'
+                  />
+                }
+              />
+              <Cell
+                contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
+                cellContentView={
+                  <TextInput
+                    style={styles.inputBox}
+                    onChangeText={(email) => this.setState({email: email})}
+                    keyboardType='email-address'
+                    autoCapitalize='none'
+                    placeholder='Email'
+                  />
+                }
+              />
+              <Cell
+                contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
+                cellContentView={
+                  <TextInput
+                    style={styles.inputBox}
+                    secureTextEntry={true}
+                    onChangeText={(password) => this.setState({password: password})}
+                    placeholder='Password'
+                  />
+                }
+              />
+            </Section>
+            <Section
+              footerComponent={
+                <View style={styles.switchContainer}>
+                  <TouchableOpacity onPress={this.onSwitchToLogin}>
+                    <Text style={styles.switchText}>{`Already have an account?\nLogin instead.`}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              }>
+              <Cell
+                onPress={this.onSignup}
+                isDisabled={this.state.loading}
+                cellStyle="Basic"
+                titleTextColor="#5291F4"
+                titleTextStyle={ { textAlign: 'center' } }
+                title="Signup"
+              />
+          </Section>
+          </TableView>
         </RootView>
       </ApolloProvider>
     );
@@ -188,26 +226,33 @@ class CreateUserNavigatorShim extends Component {
 module.exports = CreateUserNavigatorShim;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+  header: {
+    color: '#787878',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 20,
+    paddingBottom: 10,
+    textAlign: 'center',
   },
   inputBox: {
-    height: 40,
-    paddingLeft: 10,
-  },
-  loginContent: {
-    flexDirection: 'row',
-  },
-  loginContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#4267B2',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: 44,
+    flex: 1,
   },
-  loginContainerText: {
-    color: 'white',
+  connectError: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    textAlign: 'center',
+    color: 'red',
   },
+  switchContainer: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  switchText: {
+    color: '#5291F4',
+    textAlign: 'center',
+  }
 });
