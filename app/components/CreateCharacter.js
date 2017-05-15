@@ -7,13 +7,16 @@ import {
   View,
   Image,
   TextInput,
-  TouchableHighlight,
-  KeyboardAvoidingView,
 } from 'react-native';
 import { gql, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { ApolloProvider } from 'react-apollo';
 import { NavigationActions } from 'react-navigation';
+import {
+  Cell,
+  Section,
+  TableView,
+} from 'react-native-tableview-simple';
 
 import RootView from './RootView';
 import ActionTypes from '../constants/ActionTypes';
@@ -27,6 +30,7 @@ class CreateCharacter extends Component {
     super(props);
     this.state = {
       characterName: '',
+      error: null,
     };
   }
 
@@ -48,37 +52,59 @@ class CreateCharacter extends Component {
         character: data.createCharacter.character
       });
 
-      const action = NavigationActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate('Home')
-        ]
-      });
-      this.props.navigation.dispatch(action);
+      this.props.navigation.dispatch(NavigationActions.back());
     }).catch((error) => {
       console.log('Error sending create character query:', error);
+
+      this.setState({
+        error: error.message
+      })
     });
   }
 
   render() {
+    var connectError = this.state.error ? (
+      <Text style={styles.connectError}>
+        { this.state.error }
+      </Text>
+    ) : null;
+
     return (
       <ApolloProvider client={this.props.realm.apollo}>
         <RootView>
-          <KeyboardAvoidingView behavior='padding' style={styles.container}>
-            <TextInput
-              style={styles.inputBox}
-              onChangeText={(characterName) => this.setState({characterName: characterName})}
-              placeholder='Character Name'
-            />
-
-            <TouchableHighlight onPress={this.onCreate} style={styles.loginContainer}>
-              <View style={styles.loginContent}>
-                <Text style={styles.loginContainerText}>
-                  Create Character
+          <TableView>
+            <Section
+              headerComponent={
+                <Text style={styles.header}>
+                  Create a new character on {this.props.realm.name}.
                 </Text>
-              </View>
-            </TouchableHighlight>
-          </KeyboardAvoidingView>
+              }
+              footerComponent={connectError}
+              >
+              <Cell
+                contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
+                cellContentView={
+                  <TextInput
+                    style={styles.inputBox}
+                    onChangeText={(characterName) => this.setState({characterName: characterName})}
+                    placeholder='Character Name'
+                    autoCorrect={false}
+                    autoCapitalize='none'
+                  />
+                }
+              />
+            </Section>
+            <Section>
+              <Cell
+                onPress={this.onCreate}
+                isDisabled={this.state.loading}
+                cellStyle="Basic"
+                titleTextColor="#5291F4"
+                titleTextStyle={ { textAlign: 'center' } }
+                title="Create Character"
+              />
+            </Section>
+          </TableView>
         </RootView>
       </ApolloProvider>
     );
@@ -123,26 +149,23 @@ class CreateCharacterNavigatorShim extends Component {
 module.exports = CreateCharacterNavigatorShim;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+  header: {
+    color: '#787878',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 20,
+    paddingBottom: 10,
+    textAlign: 'center',
   },
   inputBox: {
-    height: 40,
-    paddingLeft: 10,
-  },
-  loginContent: {
-    flexDirection: 'row',
-  },
-  loginContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#4267B2',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: 44,
+    flex: 1,
   },
-  loginContainerText: {
-    color: 'white',
+  connectError: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    textAlign: 'center',
+    color: 'red',
   },
 });
