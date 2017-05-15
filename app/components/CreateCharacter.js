@@ -29,12 +29,18 @@ class CreateCharacter extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       characterName: '',
       error: null,
     };
   }
 
   onCreate = () => {
+    this.setState({
+      loading: true,
+      error: null,
+    });
+
     this.props.mutate({
       variables: {
         input: {
@@ -45,6 +51,11 @@ class CreateCharacter extends Component {
       }
     }).then(({ data }) => {
       console.log('Create character succeeded:', data);
+
+      this.setState({
+        loading: false,
+        error: null,
+      });
 
       this.props.dispatch({
         type: ActionTypes.REALM_CHARACTER_ADD,
@@ -57,7 +68,8 @@ class CreateCharacter extends Component {
       console.log('Error sending create character query:', error);
 
       this.setState({
-        error: error.message
+        loading: false,
+        error: error.message,
       })
     });
   }
@@ -101,6 +113,7 @@ class CreateCharacter extends Component {
                 cellStyle="Basic"
                 titleTextColor="#5291F4"
                 titleTextStyle={ { textAlign: 'center' } }
+                titleTextStyleDisabled={ { textAlign: 'center' } }
                 title="Create Character"
               />
             </Section>

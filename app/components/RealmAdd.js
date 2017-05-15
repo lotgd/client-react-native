@@ -161,6 +161,7 @@ class RealmAdd extends Component {
                   cellStyle="Basic"
                   titleTextColor="#5291F4"
                   titleTextStyle={ { textAlign: 'center' } }
+                  titleTextStyleDisabled={ { textAlign: 'center' } }
                   title="Connect"
                 />
             </Section>

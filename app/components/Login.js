@@ -151,6 +151,7 @@ class Login extends Component {
                 cellStyle="Basic"
                 titleTextColor="#5291F4"
                 titleTextStyle={ { textAlign: 'center' } }
+                titleTextStyleDisabled={ { textAlign: 'center' } }
                 title="Login"
               />
             </Section>
