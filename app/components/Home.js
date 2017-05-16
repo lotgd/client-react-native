@@ -29,7 +29,7 @@ const LoginModel = { displayName: 'Login or sign up', id: '-2' };
 
 class Home extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Realms',
+    title: 'Legend of the Green Dragon',
     headerLeft: <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('Settings')
