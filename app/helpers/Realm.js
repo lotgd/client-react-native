@@ -35,7 +35,7 @@ export function RealmBindApollo(url: string, realm: Object): Object {
   networkInterface.use([{
     applyMiddleware(req, next) {
       if (!req.options.headers) {
-          req.options.headers = {};  // Create the header object if needed.
+        req.options.headers = {};  // Create the header object if needed.
       }
       if (_.has(realm, 'session.apiKey')) {
         req.options.headers.token = realm.session.apiKey;
