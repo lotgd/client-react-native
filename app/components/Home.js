@@ -36,7 +36,8 @@ class Home extends Component {
                     navigation.navigate('Settings')
                   }}>
                     <Icon name="ios-settings" size={30} style={{ marginLeft: 10 }} color="#4F8EF7" />
-                </TouchableOpacity>
+                </TouchableOpacity>,
+    headerTitleStyle: { fontSize: 15 }
   });
 
   _onAddRealm = () => {
