@@ -25,7 +25,8 @@ import _ from 'lodash';
 class RealmAdd extends Component {
   state: {
     loading: boolean,
-    connectError: ?string,
+    error: ?string,
+    status: ?string,
     url: string,
   }
 
@@ -38,21 +39,24 @@ class RealmAdd extends Component {
 
     this.state = {
       loading: false,
-      connectError: null,
+      error: null,
       url: '',
+      status: null,
     };
   }
 
   onConnect = () => {
     this.setState({
       loading: true,
-      connectError: null,
+      error: null,
+      status: 'Connecting...',
     });
 
     if (this.state.url.length == 0) {
       this.setState({
         loading: false,
-        connectError: "You must enter a URL.",
+        error: "You must enter a URL.",
+        status: null,
       });
       return;
     }
@@ -61,7 +65,8 @@ class RealmAdd extends Component {
     if (this.props.realms[this.state.url]) {
       this.setState({
         loading: false,
-        connectError: "You're already connected to that realm.",
+        error: "You're already connected to that realm.",
+        status: null,
       });
       return;
     }
@@ -94,38 +99,38 @@ class RealmAdd extends Component {
         this.props.navigation.navigate('Home');
       } else {
         this.setState({
-          connectError: "Can't seem to find a compatible server at that address.",
+          error: "Can't seem to find a compatible server at that address.",
         });
       }
-      this.setState({
-        loading: false,
-      });
     }).catch((error) => {
       console.log('Error checking compatibility of ' + (url ? url : 'null') + ': ' + error);
 
       if (error instanceof RealmNotCompatibleError) {
         this.setState({
           loading: false,
-          connectError: "Couldn't find a compatible server at that address. This app only support Daenerys compatible servers.",
+          error: "Couldn't find a compatible server at that address. This app only support Daenerys compatible servers.",
+          status: null,
         });
       } else if (error instanceof RealmNotFoundError) {
         this.setState({
           loading: false,
-          connectError: "Can't connect to that server. Check your connection and the URL and try again.",
+          error: "Can't connect to that server. Check your connection and the URL and try again.",
+          status: null,
         });
       } else {
         this.setState({
           loading: false,
-          connectError: "Something went wrong while connecting. Try again.",
+          error: "Something went wrong while connecting. Try again.",
+          status: null,
         });
       }
     });
   }
 
   render() {
-    var connectError = this.state.connectError ? (
-      <Text style={styles.connectError}>
-        { this.state.connectError }
+    var error = this.state.error ? (
+      <Text style={styles.error }>
+        { this.state.error }
       </Text>
     ) : null;
 
@@ -138,7 +143,7 @@ class RealmAdd extends Component {
                   Connect to a Legend of the Green Dragon compatible server.
                 </Text>
               }
-              footerComponent={connectError}
+              footerComponent={error}
             >
                 <Cell
                   contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
@@ -162,7 +167,7 @@ class RealmAdd extends Component {
                   titleTextColor="#5291F4"
                   titleTextStyle={ { textAlign: 'center' } }
                   titleTextStyleDisabled={ { textAlign: 'center' } }
-                  title="Connect"
+                  title={this.state.status ? this.state.status : "Add Realm"}
                 />
             </Section>
           </TableView>
@@ -193,7 +198,7 @@ const styles = StyleSheet.create({
     height: 44,
     flex: 1,
   },
-  connectError: {
+  error: {
     paddingLeft: 15,
     paddingRight: 15,
     paddingTop: 10,
