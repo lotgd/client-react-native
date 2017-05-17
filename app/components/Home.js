@@ -25,7 +25,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import RootView  from './RootView';
 
 const CreateNewCharacterModel = { displayName: 'Create new character', id: '-1' };
-const LoginModel = { displayName: 'Login or sign up', id: '-2' };
+const LoginModel = { displayName: 'Sign up or login', id: '-2' };
 
 class Home extends Component {
   static navigationOptions = ({ navigation }) => ({
