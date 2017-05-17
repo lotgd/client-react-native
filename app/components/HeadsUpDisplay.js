@@ -4,35 +4,27 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  View,
-} from 'react-native';
+  View, } from 'react-native';
+import _ from 'lodash';
 
-var HeadsUpDisplay = React.createClass({
-  render: function() {
-    var values = this.props.values;
-    var renderGroup = this._renderGroup;
-    return (
-    <View style={styles.hud}>
-      {Object.keys(values).map(function(k, index) {
-        if (index > 3) {
-          return null;
-        }
-        var v = values[k];
-        return renderGroup(k, v);
-      })}
-    </View>
-    );
-  },
+class HeadsUpDisplay extends Component {
+  render() {
+    const values = _.map(this.props.values, function(value, key) {
+        return (
+          <View key={key} style={styles.hudGroup}>
+            <Text style={styles.hudValue}>{value}</Text>
+            <Text style={styles.hudLabel}>{key}</Text>
+          </View>
+        )
+    });
 
-  _renderGroup: function(label, value) {
     return (
-      <View key={label} style={styles.hudGroup}>
-        <Text style={styles.hudValue}>{value}</Text>
-        <Text style={styles.hudLabel}>{label}</Text>
+      <View style={styles.hud}>
+        {values}
       </View>
     );
   }
-});
+}
 
 module.exports = HeadsUpDisplay;
 
