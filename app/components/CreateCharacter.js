@@ -23,7 +23,10 @@ import ActionTypes from '../constants/ActionTypes';
 
 class CreateCharacter extends Component {
   state: {
-    characterName: string
+    loading: boolean,
+    characterName: string,
+    error: ?string,
+    status: ?string,
   }
 
   constructor(props) {
@@ -32,6 +35,7 @@ class CreateCharacter extends Component {
       loading: false,
       characterName: '',
       error: null,
+      status: null,
     };
   }
 
@@ -39,6 +43,7 @@ class CreateCharacter extends Component {
     this.setState({
       loading: true,
       error: null,
+      status: "Creating character...",
     });
 
     this.props.mutate({
@@ -51,11 +56,6 @@ class CreateCharacter extends Component {
       }
     }).then(({ data }) => {
       console.log('Create character succeeded:', data);
-
-      this.setState({
-        loading: false,
-        error: null,
-      });
 
       this.props.dispatch({
         type: ActionTypes.REALM_CHARACTER_ADD,
@@ -70,6 +70,7 @@ class CreateCharacter extends Component {
       this.setState({
         loading: false,
         error: error.message,
+        status: null,
       })
     });
   }
@@ -114,7 +115,7 @@ class CreateCharacter extends Component {
                 titleTextColor="#5291F4"
                 titleTextStyle={ { textAlign: 'center' } }
                 titleTextStyleDisabled={ { textAlign: 'center' } }
-                title="Create Character"
+                title={this.state.status ? this.state.status : 'Create Character'}
               />
             </Section>
           </TableView>
