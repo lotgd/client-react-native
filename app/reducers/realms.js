@@ -24,12 +24,13 @@ export default function realms(state: Object = {}, action: Object) {
     case ActionTypes.REALM_LOGIN:
       var r = state[action.url];
       if (r) {
+        // Rebind the Apollo client now that the token has changed.
         return {
           ...state,
-          [action.url]: {
+          [action.url]: RealmBindApollo(action.url, {
             ...r,
               session: action.session,
-          },
+          }),
         };
       } else {
         // TODO: we should handle errors in reducers somehow.
