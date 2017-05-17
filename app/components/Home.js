@@ -11,6 +11,7 @@ import {
   Button,
   TouchableOpacity,
   TouchableHighlight,
+  ScrollView,
 } from 'react-native';
 import {
   Cell,
@@ -117,9 +118,11 @@ class Home extends Component {
 
     return (
       <RootView>
-        <TableView>
-          { realms }
-        </TableView>
+        <ScrollView>
+          <TableView>
+            { realms }
+          </TableView>
+        </ScrollView>
       </RootView>
     );
   }
