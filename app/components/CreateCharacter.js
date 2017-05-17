@@ -44,7 +44,7 @@ class CreateCharacter extends Component {
     this.props.mutate({
       variables: {
         input: {
-          userId: this.props.realm._session.user.id,
+          userId: this.props.realm.session.user.id,
           characterName: this.state.characterName,
           clientMutationId: 'mutationId'
         }

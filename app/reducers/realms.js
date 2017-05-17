@@ -28,7 +28,7 @@ export default function realms(state: Object = {}, action: Object) {
           ...state,
           [action.url]: {
             ...r,
-            _session: action.session,
+              session: action.session,
           },
         };
       } else {

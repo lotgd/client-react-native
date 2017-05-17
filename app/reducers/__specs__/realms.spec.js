@@ -36,7 +36,7 @@ describe('realms reducer', () => {
     ).to.eql({
       'testUrl': {
         foo: 'bar',
-        _session: {
+        session: {
           foo: 'baz',
         },
       }

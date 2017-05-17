@@ -37,8 +37,8 @@ export function RealmBindApollo(url: string, realm: Object): Object {
       if (!req.options.headers) {
           req.options.headers = {};  // Create the header object if needed.
       }
-      if (_.has(realm, '_session.apiKey')) {
-        req.options.headers.token = realm._session.apiKey;
+      if (_.has(realm, 'session.apiKey')) {
+        req.options.headers.token = realm.session.apiKey;
       }
       next();
     }

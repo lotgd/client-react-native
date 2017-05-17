@@ -55,7 +55,7 @@ class Home extends Component {
 
   render() {
     const _characterCellsForRealm = (realm) => {
-      if (realm._session) {
+      if (realm.session) {
         const characterModels = [
           ..._.map(realm.characters ? realm.characters : {}, (c) => {
             return c;
