@@ -1,35 +1,7 @@
+// @flow
 'use strict';
-import React, {
-  AppRegistry,
-  Component,
-  Navigator,
-} from 'react-native';
 
-var Login = require('./app/Login');
+import { AppRegistry } from 'react-native';
+import setup from './app/setup';
 
-class LotGD extends Component {
-  render() {
-    return (
-      <Navigator
-        initialRoute={{uri: 'lotgd://app/bootstrap', index: 0}}
-        renderScene={function f(route, navigator) {
-          switch (route.uri) {
-            case 'lotgd://app/bootstrap':
-            case 'lotgd://app/login':
-              return (
-                <Login/>
-              );
-            case 'lotgd://app/home':
-            case 'lotgd://app/notifications':
-            case 'lotgd://app/messages':
-            case 'lotgd://app/realm/messages':
-            case 'lotgd://app/realm/play':
-            case 'lotgd://app/realm/new-character':
-          }
-        }}
-        />
-      );
-  }
-}
-
-AppRegistry.registerComponent('LotGD', () => LotGD);
+AppRegistry.registerComponent('LotGD', setup);
