@@ -100,7 +100,7 @@ class Login extends Component {
   }
 
   onSwitchToSignup = () => {
-    this.props.navigation.navigate('CreateUser', { realm: this.props.realm });
+    this.props.navigation.navigate('UserCreate', { realm: this.props.realm });
   }
 
   render() {

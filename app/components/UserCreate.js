@@ -25,7 +25,7 @@ import {
 import RootView from './RootView';
 import ActionTypes from '../constants/ActionTypes';
 
-class CreateUser extends Component {
+class UserCreate extends Component {
   state: {
     name: string,
     email: string,
@@ -225,9 +225,9 @@ const createPasswordUser = gql`
   }
 `;
 
-const WrappedCreateUser = connect()(graphql(createPasswordUser)(CreateUser));
+const WrappedUserCreate = connect()(graphql(createPasswordUser)(UserCreate));
 
-class CreateUserNavigatorShim extends Component {
+class UserCreateNavigatorShim extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Sign Up',
   });
@@ -235,7 +235,7 @@ class CreateUserNavigatorShim extends Component {
   render() {
     return (
       <ApolloProvider client={this.props.navigation.state.params.realm.apollo}>
-        <WrappedCreateUser
+        <WrappedUserCreate
           {...this.props}
           realm={this.props.navigation.state.params.realm}
           navigation={this.props.navigation}
@@ -245,7 +245,7 @@ class CreateUserNavigatorShim extends Component {
   }
 }
 
-module.exports = CreateUserNavigatorShim;
+module.exports = UserCreateNavigatorShim;
 
 const styles = StyleSheet.create({
   header: {

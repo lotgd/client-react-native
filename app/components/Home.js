@@ -47,7 +47,7 @@ class Home extends Component {
     if (model.id == CreateNewCharacterModel.id) {
       this.props.navigation.navigate('CharacterCreate', { realm: realm });
     } else if (model.id == LoginModel.id) {
-      this.props.navigation.navigate('CreateUser', { realm: realm });
+      this.props.navigation.navigate('UserCreate', { realm: realm });
     } else {
       // TODO: navigate to the game
     }
