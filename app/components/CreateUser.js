@@ -31,6 +31,8 @@ class CreateUser extends Component {
     email: string,
     password: string,
     error: ?string,
+    loading: boolean,
+    status: ?string,
   }
 
   constructor(props) {
@@ -40,6 +42,8 @@ class CreateUser extends Component {
       email: '',
       password: '',
       error: null,
+      loading: false,
+      status: null
     };
   }
 
@@ -48,27 +52,41 @@ class CreateUser extends Component {
     const email = _.trim(this.state.email).toLowerCase();
     const password = this.state.password;
 
+    this.setState({
+      loading: true,
+      error: null,
+      status: 'Creating user...',
+    });
+
     if (name.length == 0) {
       this.setState({
         error: 'You must enter a name.',
+        loading: false,
+        status: null,
       });
       return;
     }
     if (email.length == 0) {
       this.setState({
         error: 'You must enter an email.',
+        loading: false,
+        status: null,
       });
       return;
     }
     if (!EmailValidator.validate(email)) {
       this.setState({
         error: 'That doesn\'t look like an email.',
+        loading: false,
+        status: null,
       });
       return;
     }
     if (password.length == 0) {
       this.setState({
-        error: 'You must enter a password.'
+        error: 'You must enter a password.',
+        loading: false,
+        status: null,
       });
       return;
     }
@@ -84,8 +102,14 @@ class CreateUser extends Component {
       }
     }).then(({ data }) => {
       // TODO: should check for errors.
-
       console.log('Successfully created user: ', data);
+
+      this.setState({
+        error: null,
+        loading: true,
+        status: 'Connecting...',
+      });
+      // TODO: we should just log people in here.
 
       this.props.dispatch({
         type: ActionTypes.BANNER_ADD,
@@ -97,15 +121,12 @@ class CreateUser extends Component {
 
       this.props.navigation.navigate('Login', { realm: this.props.realm });
     }).catch((error) => {
-      console.log(JSON.stringify(error));
       console.log('Error creating user: ', error);
 
-      this.props.dispatch({
-        type: ActionTypes.BANNER_ADD,
-        banner: {
-          text: 'Error creating user!',
-          type: 'error',
-        }
+      this.setState({
+        error: error.message,
+        loading: false,
+        status: null,
       });
     });
   }
@@ -128,7 +149,7 @@ class CreateUser extends Component {
             <Section
               headerComponent={
                 <Text style={styles.header}>
-                  Create a user on {this.props.realm.name}.
+                  Sign up for a new account on {this.props.realm.name}.
                 </Text>
               }
               footerComponent={connectError}
@@ -186,7 +207,7 @@ class CreateUser extends Component {
                 titleTextColor="#5291F4"
                 titleTextStyle={ { textAlign: 'center' } }
                 titleTextStyleDisabled={ { textAlign: 'center' } }
-                title="Signup"
+                title={this.state.status ? this.state.status : 'Sign Up' }
               />
           </Section>
           </TableView>
@@ -208,7 +229,7 @@ const WrappedCreateUser = connect()(graphql(createPasswordUser)(CreateUser));
 
 class CreateUserNavigatorShim extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Create User',
+    title: 'Sign Up',
   });
 
   render() {
