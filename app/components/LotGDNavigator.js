@@ -12,6 +12,7 @@ import UserCreate from './UserCreate';
 import Home from './Home';
 import RealmAdd from './RealmAdd';
 import Settings from './Settings';
+import Gameplay from './Gameplay';
 
 // For options to pass as StackNavigatorConfig, see
 // https://reactnavigation.org/docs/navigators/stack
@@ -23,6 +24,7 @@ export default (stackNavigatorConfig: Object) => {
       RealmAdd: { screen: RealmAdd },
       Login: { screen: Login },
       Settings: { screen: Settings },
+      Gameplay: { screen: Gameplay },
     },
     stackNavigatorConfig);
 };
