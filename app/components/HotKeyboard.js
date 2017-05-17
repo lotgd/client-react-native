@@ -7,36 +7,34 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import _ from 'lodash';
 
-var HotKeyboard = React.createClass({
-  render: function() {
-    var keys = this.props.keys;
-    var renderKey = this._renderKey;
+class HotKeyboard extends Component  {
+  render() {
+    const onPressButton = this._onPressButton;
+    const keys = _.map(this.props.keys, function(k) {
+      return (
+        <TouchableOpacity key={k.key} onPress={() => { onPressButton(k) }}>
+          <View style={styles.key}>
+            <Text style={styles.hotkey}>
+              {k.key}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    });
+
     return (
       <View style={styles.keyboard}>
-        {keys.map(function(k) {
-          return renderKey(k);
-        })}
+        { keys }
       </View>
     );
-  },
+  }
 
-  _renderKey: function(k) {
-    return (
-      <TouchableOpacity key={k} onPress={this._onPressButton.bind(this, k)}>
-        <View style={styles.key}>
-          <Text style={styles.hotkey}>
-            {k}
-            </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  },
-
-  _onPressButton: function(k) {
+  _onPressButton = (k) => {
     this.props.onPress(k);
   }
-});
+}
 
 module.exports = HotKeyboard;
 
