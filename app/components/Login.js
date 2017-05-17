@@ -30,6 +30,8 @@ class Login extends Component {
       email: '',
       password: '',
       error: null,
+      loading: false,
+      status: null,
     };
   }
 
@@ -40,19 +42,25 @@ class Login extends Component {
     if (email.length == 0) {
       this.setState({
         error: 'You must enter an email.',
+        loading: false,
+        status: null,
       });
       return;
     }
     if (password.length == 0) {
       this.setState({
         error: 'You must enter a password.',
+        loading: false,
+        status: null,
       });
       return;
     }
 
     // For now, clear any error state.
     this.setState({
-      error: null
+      error: null,
+      loading: true,
+      status: 'Logging in...',
     });
 
     this.props.mutate({
@@ -85,6 +93,8 @@ class Login extends Component {
 
       this.setState({
         error: error.message,
+        loading: false,
+        status: null,
       });
     });
   }
@@ -152,7 +162,7 @@ class Login extends Component {
                 titleTextColor="#5291F4"
                 titleTextStyle={ { textAlign: 'center' } }
                 titleTextStyleDisabled={ { textAlign: 'center' } }
-                title="Login"
+                title={this.state.status ? this.state.status : 'Login'}
               />
             </Section>
           </TableView>
