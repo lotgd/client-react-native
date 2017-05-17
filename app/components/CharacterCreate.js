@@ -21,7 +21,7 @@ import {
 import RootView from './RootView';
 import ActionTypes from '../constants/ActionTypes';
 
-class CreateCharacter extends Component {
+class CharacterCreate extends Component {
   state: {
     loading: boolean,
     characterName: string,
@@ -140,9 +140,9 @@ const createCharacterMutation = gql`
   }
 `;
 
-const WrappedCreateCharacter = connect()(graphql(createCharacterMutation)(CreateCharacter));
+const WrappedCharacterCreate = connect()(graphql(createCharacterMutation)(CharacterCreate));
 
-class CreateCharacterNavigatorShim extends Component {
+class CharacterCreateNavigatorShim extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Create Character',
   });
@@ -150,7 +150,7 @@ class CreateCharacterNavigatorShim extends Component {
   render() {
     return (
       <ApolloProvider client={this.props.navigation.state.params.realm.apollo}>
-        <WrappedCreateCharacter
+        <WrappedCharacterCreate
           {...this.props}
           realm={this.props.navigation.state.params.realm}
           navigation={this.props.navigation}
@@ -160,7 +160,7 @@ class CreateCharacterNavigatorShim extends Component {
   }
 }
 
-module.exports = CreateCharacterNavigatorShim;
+module.exports = CharacterCreateNavigatorShim;
 
 const styles = StyleSheet.create({
   header: {

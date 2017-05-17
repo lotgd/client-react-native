@@ -45,7 +45,7 @@ class Home extends Component {
   _onPress = (model: Object, realm: Object) => {
     // TODO: move this to a callback
     if (model.id == CreateNewCharacterModel.id) {
-      this.props.navigation.navigate('CreateCharacter', { realm: realm });
+      this.props.navigation.navigate('CharacterCreate', { realm: realm });
     } else if (model.id == LoginModel.id) {
       this.props.navigation.navigate('CreateUser', { realm: realm });
     } else {
