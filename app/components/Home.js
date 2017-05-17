@@ -101,6 +101,16 @@ class Home extends Component {
         </Section>
       );
     });
+    if (realms.length == 0) {
+      realms.push(
+        <Text
+          style={styles.infoText}
+          key="no-realms"
+        >
+          You're not connected to any realms yet. Add a realm using the button below.
+        </Text>
+      );
+    }
 
     // TableView only takes an array or a single element without a warning, lolz.
     realms.push(
@@ -141,7 +151,11 @@ export default connect(
 )(Home);
 
 const styles = StyleSheet.create({
-  text: {
-    flex: 1,
+  infoText: {
+    color: '#787878',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 25,
+    textAlign: 'center',
   }
 });
