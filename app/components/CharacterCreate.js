@@ -53,15 +53,23 @@ class CharacterCreate extends Component {
           characterName: this.state.characterName,
           clientMutationId: 'mutationId'
         }
-      }
+      },
+      refetchQueries:[{
+        query: gql`
+          query UserQuery($id: String!) {
+            user(id: $id) {
+              characters {
+                id,
+                name,
+                displayName
+              }
+            }
+          }
+        `,
+        variables: { id: this.props.realm.session.user.id }
+      }]
     }).then(({ data }) => {
       console.log('Create character succeeded:', data);
-
-      this.props.dispatch({
-        type: ActionTypes.REALM_CHARACTER_ADD,
-        url: this.props.realm.url,
-        character: data.createCharacter.character
-      });
 
       this.props.navigation.dispatch(NavigationActions.back());
     }).catch((error) => {
@@ -83,17 +91,16 @@ class CharacterCreate extends Component {
     ) : null;
 
     return (
-      <ApolloProvider client={this.props.realm.apollo}>
-        <RootView>
-          <TableView>
-            <Section
-              headerComponent={
-                <Text style={styles.header}>
-                  Create a new character on {this.props.realm.name}.
-                </Text>
-              }
-              footerComponent={connectError}
-              >
+      <RootView>
+        <TableView>
+          <Section
+            headerComponent={
+              <Text style={styles.header}>
+                Create a new character on {this.props.realm.name}.
+              </Text>
+            }
+            footerComponent={connectError}
+            >
               <Cell
                 contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
                 cellContentView={
@@ -120,8 +127,7 @@ class CharacterCreate extends Component {
             </Section>
           </TableView>
         </RootView>
-      </ApolloProvider>
-    );
+      );
   }
 }
 
@@ -129,7 +135,12 @@ const createCharacterMutation = gql`
   mutation createCharacterMutation($input: CreateCharacterInput!) {
     createCharacter(input: $input) {
       user {
-        id
+        id,
+        characters {
+          id,
+          name,
+          displayName
+        }
       },
       character {
         id,
@@ -153,7 +164,6 @@ class CharacterCreateNavigatorShim extends Component {
         <WrappedCharacterCreate
           {...this.props}
           realm={this.props.navigation.state.params.realm}
-          navigation={this.props.navigation}
         />
       </ApolloProvider>
     );

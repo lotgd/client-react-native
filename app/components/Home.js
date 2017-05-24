@@ -24,8 +24,8 @@ import util from 'util';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import RootView  from './RootView';
+import CharacterList from './CharacterList';
 
-const CreateNewCharacterModel = { displayName: 'Create new character', id: '-1' };
 const LoginModel = { displayName: 'Sign up or login', id: '-2' };
 
 class Home extends Component {
@@ -45,61 +45,35 @@ class Home extends Component {
   }
 
   _onPress = (model: Object, realm: Object) => {
-    // TODO: move this to a callback
-    if (model.id == CreateNewCharacterModel.id) {
-      this.props.navigation.navigate('CharacterCreate', { realm: realm });
-    } else if (model.id == LoginModel.id) {
+    if (model.id == LoginModel.id) {
       this.props.navigation.navigate('UserCreate', { realm: realm });
-    } else {
-      this.props.navigation.navigate('Gameplay', { realm: realm });
     }
   }
 
   render() {
-    const _characterCellsForRealm = (realm) => {
+    const realms = _.map(this.props.realms, (realm, url) => {
       if (realm.session) {
-        const characterModels = [
-          ..._.map(realm.characters ? realm.characters : {}, (c) => {
-            return c;
-          }),
-          CreateNewCharacterModel,
-        ];
-        return _.map(characterModels, (character) => {
-          return (
-            <Cell
-              key={character.displayName}
-              onPress={() => {
-                this._onPress(character, realm);
-              }}
-              cellStyle="Basic"
-              accessory="DisclosureIndicator"
-              title={character.displayName}
-            />
-          );
-        });
+        return <CharacterList
+          key={url}
+          realm={realm}
+          navigation={this.props.navigation}/>
       } else {
         return (
-          <Cell
-            key={LoginModel.displayName}
-            onPress={() => {
-              this._onPress(LoginModel, realm);
-            }}
-            accessory="DisclosureIndicator"
-            cellStyle="Basic"
-            title={LoginModel.displayName}
-          />
+          <Section
+            key={url}
+            header={realm.name ? realm.name : 'Unknown Realm'}>
+            <Cell
+              key={LoginModel.displayName}
+              onPress={() => {
+                this._onPress(LoginModel, realm);
+              }}
+              accessory="DisclosureIndicator"
+              cellStyle="Basic"
+              title={LoginModel.displayName}
+            />
+          </Section>
         );
       }
-    };
-
-    const realms = _.map(this.props.realms, (realm, url) => {
-      return (
-        <Section
-          key={url}
-          header={realm.name ? realm.name : 'Unknown Realm'}>
-          { _characterCellsForRealm(realm) }
-        </Section>
-      );
     });
     if (realms.length == 0) {
       realms.push(

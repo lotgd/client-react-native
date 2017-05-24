@@ -10,5 +10,4 @@ export default keyMirror({
   REALM_ADD: null,
   REALM_DELETE: null,
   REALM_LOGIN: null,
-  REALM_CHARACTER_ADD: null,
 });

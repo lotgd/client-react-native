@@ -111,17 +111,16 @@ class Login extends Component {
     ) : null;
 
     return (
-      <ApolloProvider client={this.props.realm.apollo}>
-        <RootView>
-          <TableView>
-            <Section
-              headerComponent={
-                <Text style={styles.header}>
-                  Login with an existing user on {this.props.realm.name}.
-                </Text>
-              }
-              footerComponent={connectError}
-              >
+      <RootView>
+        <TableView>
+          <Section
+            headerComponent={
+              <Text style={styles.header}>
+                Login with an existing user on {this.props.realm.name}.
+              </Text>
+            }
+            footerComponent={connectError}
+            >
               <Cell
                 contentContainerStyle={{ alignItems: 'flex-start', height: 44 }}
                 cellContentView={
@@ -167,8 +166,7 @@ class Login extends Component {
             </Section>
           </TableView>
         </RootView>
-      </ApolloProvider>
-    );
+      );
   }
 }
 
@@ -180,7 +178,12 @@ const loginMutation = gql`
           expiresAt,
           user {
               id,
-              name
+              name,
+              characters {
+                id,
+                name,
+                displayName
+              }
           }
       },
       clientMutationId
