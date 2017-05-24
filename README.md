@@ -8,4 +8,11 @@ This is a [React Native](https://facebook.github.io/react-native/) client, targe
 
 Heavy development :). Nothing here is usable but hopefully we're making steady progress.
 
+Progress video: https://youtu.be/jyfSBP2rav8
+
 Reach out to austenmc or on [DragonPrime](http://dragonprime.net) if you want to help.
+
+## Development Environment
+
+Remember that to access a server running on a localhost from genymotion, you
+want to use the IP address `10.0.3.2`.
