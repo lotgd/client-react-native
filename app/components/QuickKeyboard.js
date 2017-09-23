@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import _ from 'lodash';
 
-class HotKeyboard extends Component  {
+class QuickKeyboard extends Component  {
   render() {
     const onPressButton = this._onPressButton;
     const keys = _.map(this.props.keys, function(k) {
@@ -36,7 +36,7 @@ class HotKeyboard extends Component  {
   }
 }
 
-module.exports = HotKeyboard;
+module.exports = QuickKeyboard;
 
 const styles = StyleSheet.create({
   keyboard: {
