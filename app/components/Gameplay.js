@@ -23,7 +23,7 @@ import {
 
 import ActionTypes from '../constants/ActionTypes';
 import HeadsUpDisplay from './HeadsUpDisplay';
-import QuickKeyboard from './QuickKeyboard';
+import HotKeyboard from './HotKeyboard';
 import RootView from './RootView';
 
 class Gameplay extends Component {
@@ -106,38 +106,15 @@ class Gameplay extends Component {
             </TableView>
           </ScrollView>
           <HeadsUpDisplay values={hudValues}/>
-          <QuickKeyboard
+          <HotKeyboard
             keys={keys}
-            onPress={(k) => { this._onAction(k.value); }}
+            realm={this.props.realm}
           />
         </RootView>
       </ApolloProvider>
     );
   }
 }
-
-const takeActionMutation = gql`
-  mutation takeActionMutation($input: TakeActionInput!) {
-    takeAction(input: $input) {
-      viewpoint {
-        title,
-        description,
-        template,
-        actionGroups {
-          id,
-          title,
-          sortKey,
-          actions {
-            id,
-            title,
-          }
-        }
-      }
-    }
-  }
-`;
-
-const WrappedGameplay = connect()(graphql(takeActionMutation)(Gameplay));
 
 class GameplayNavigatorShim extends Component {
   static navigationOptions = ({ navigation }) => ({
