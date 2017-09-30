@@ -1,6 +1,5 @@
 'use strict';
-import React, { Component } from 'react';
-import {
+import React, { Component } from 'react'; import {
   StyleSheet,
   Text,
   View,
@@ -40,81 +39,117 @@ class Gameplay extends Component {
   }
 
   render() {
-    const error = this.state.error ? (
-      <Text style={styles.error}>
-        { this.state.error }
-      </Text>
-    ) : null;
+    var view = null;
 
-    const lines = (
-      <Text style={styles.description}>
-        { this.props.data.viewpoint.description }
-      </Text>
-    );
+    if (this.props.data.loading) {
+      view = <Text>Loading...</Text>;
+    } else if (this.props.data.error) {
+      view = <Text style={styles.error}>{ this.props.data.error.message }</Text>;
+    } else {
+      console.log(this.props.data);
 
-    const hudValues = {
-      'HP': '0/0',
-      'EXP': 1000,
-    };
-
-    const sortedActionGroups = _.sortBy(this.props.data.viewpoint.actionGroups, [function(o) { return o.sortKey }]);
-
-    const onAction = this._onAction;
-    const sections = _.map(sortedActionGroups, function(g) {
-      return (
-        <Section
-          key={g.id}
-          header={g.title}
-        >
-          {
-            _.map(g.actions, function(a) {
-              return  (
-                <Cell
-                  key={a.id}
-                  onPress={() => {
-                    onAction(a.id);
-                  }}
-                  cellStyle="Basic"
-                  titleTextColor="#5291F4"
-                  titleTextStyle={ { textAlign: 'center' } }
-                  title={a.title}
-                />
-              );
-            })
-          }
-        </Section>
+      const lines = (
+        <Text style={styles.description}>
+          { this.props.data.viewpoint.description }
+        </Text>
       );
-    });
 
-    const keys = _.flatMap(sortedActionGroups, function(g) {
-      return _.map(g.actions, function(a) {
-        return {
-          key: a.title.slice(0,1),
-          value: a.id
-        };
-      });
-    });
+      const hudValues = {
+        'HP': '0/0',
+        'EXP': 1000,
+      };
 
-    return (
-      <ApolloProvider client={this.props.realm.apollo}>
-        <RootView>
-          <ScrollView>
-            { error }
-            <TableView>
-              { lines }
-              { sections }
-            </TableView>
-          </ScrollView>
-          <HeadsUpDisplay values={hudValues}/>
-          <HotKeyboard
-            keys={keys}
-            realm={this.props.realm}
-          />
-        </RootView>
-      </ApolloProvider>
-    );
+      const sortedActionGroups = _.sortBy(this.props.data.viewpoint.actionGroups, [function(o) { return o.sortKey }]);
+
+      const onAction = this._onAction;
+      const sections = _.map(sortedActionGroups, function(g) {
+        return (
+          <Section
+            key={g.id}
+            header={g.title}
+            >
+              {
+                _.map(g.actions, function(a) {
+                  return  (
+                    <Cell
+                      key={a.id}
+                      onPress={() => {
+                        onAction(a.id);
+                      }}
+                      cellStyle="Basic"
+                      titleTextColor="#5291F4"
+                      titleTextStyle={ { textAlign: 'center' } }
+                      title={a.title}
+                    />
+                  );
+                })
+              }
+            </Section>
+          );
+        });
+
+        const keys = _.flatMap(sortedActionGroups, function(g) {
+          return _.map(g.actions, function(a) {
+            return {
+              key: a.title.slice(0,1),
+              value: a.id
+            };
+          });
+        });
+
+        view = (
+          <View>
+            <ScrollView>
+              <TableView>
+                { lines }
+                { sections }
+              </TableView>
+            </ScrollView>
+            <HeadsUpDisplay values={hudValues}/>
+            <HotKeyboard
+              keys={keys}
+              realm={this.props.realm}
+            />
+          </View>
+        );
+      }
+
+      return (
+        <ApolloProvider client={this.props.realm.apollo}>
+          <RootView>
+            { view }
+          </RootView>
+        </ApolloProvider>
+      );
+    }
+  }
+
+const ViewpointQuery = gql`
+query ViewpointQuery($id: String!) {
+  viewpoint(characterId: $id) {
+    title,
+    description,
+    template,
+    actionGroups {
+      id,
+      title,
+      sortKey,
+      actions {
+        id,
+        title,
+      }
+    }
   }
 }
+`;
+
+const WrappedGameplay = graphql(ViewpointQuery, {
+  options: ({ navigation }) => ({
+    variables: {
+      id: navigation.state.params.characterId
+    }
+  })
+})(connect()(Gameplay));
 
 class GameplayNavigatorShim extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -128,36 +163,6 @@ class GameplayNavigatorShim extends Component {
           {...this.props}
           realm={this.props.navigation.state.params.realm}
           navigation={this.props.navigation}
-          data={
-            {
-              viewpoint: {
-                title: 'Village Square',
-                description: "The village square hustles and bustles. No one really notices that you're are standing there. You see various shops and businesses along main street. There is a curious looking rock to one side. On every side the village is surrounded by deep dark forest.",
-                template: 'lotgd/module-village/village',
-                actionGroups: [
-                  {
-                    id: '1',
-                    title: null,
-                    sortKey: '1',
-                    actions: [
-                      {
-                        id: '1',
-                        title: 'Forest',
-                      },
-                      {
-                        id: '2',
-                        title: 'Weapon Shop',
-                      },
-                      {
-                        id: '3',
-                        title: 'Armor Shop',
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          }
         />
       </ApolloProvider>
     );

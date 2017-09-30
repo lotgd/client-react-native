@@ -33,7 +33,7 @@ class CharacterList extends Component {
     if (model.id == CreateNewCharacterModel.id) {
       this.props.navigation.navigate('CharacterCreate', { realm: this.props.realm });
     } else {
-      this.props.navigation.navigate('Gameplay', { realm: this.props.realm });
+      this.props.navigation.navigate('Gameplay', { realm: this.props.realm, characterId: model.id });
     }
   }
 
