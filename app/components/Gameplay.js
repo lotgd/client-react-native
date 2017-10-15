@@ -98,7 +98,7 @@ class Gameplay extends Component {
         });
 
         view = (
-          <View>
+          <View style={styles.container}>
             <ScrollView>
               <TableView>
                 { lines }
@@ -172,6 +172,9 @@ class GameplayNavigatorShim extends Component {
 module.exports = GameplayNavigatorShim;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   description: {
     color: '#787878',
     paddingLeft: 15,
