@@ -146,7 +146,7 @@ class Gameplay extends Component {
 const WrappedGameplay = graphql(ViewpointQuery, {
   options: ({ navigation }) => ({
     variables: {
-      id: navigation.state.params.characterId
+      characterId: navigation.state.params.characterId
     }
   })
 })(connect()(Gameplay));

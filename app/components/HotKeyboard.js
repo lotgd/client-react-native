@@ -18,7 +18,7 @@ class HotKeyboard extends Component {
       },
       refetchQueries: [{
         query: ViewpointQuery,
-        variables: { id: this.props.characterId },
+        variables: { characterId: this.props.characterId },
       }]
     });
   }

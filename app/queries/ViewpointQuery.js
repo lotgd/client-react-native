@@ -3,8 +3,8 @@
 import { gql } from 'react-apollo';
 
 module.exports = gql`
-query ViewpointQuery($id: String!) {
-  viewpoint(characterId: $id) {
+query ViewpointQuery($characterId: String!) {
+  viewpoint(characterId: $characterId) {
     title,
     description,
     template,
