@@ -5,6 +5,7 @@ import { gql, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 
 import ViewpointQuery from '../queries/ViewpointQuery';
+import TakeActionMutation from '../queries/TakeActionMutation';
 
 class HotKeyboard extends Component {
   _onAction(value) {
@@ -33,27 +34,6 @@ class HotKeyboard extends Component {
   }
 }
 
-const takeActionMutation = gql`
-  mutation takeActionMutation($input: TakeActionInput!) {
-    takeAction(input: $input) {
-      viewpoint {
-        title,
-        description,
-        template,
-        actionGroups {
-          id,
-          title,
-          sortKey,
-          actions {
-            id,
-            title,
-          }
-        }
-      }
-    }
-  }
-`;
-
-const WrappedKeyboard = connect()(graphql(takeActionMutation)(HotKeyboard));
+const WrappedKeyboard = connect()(graphql(TakeActionMutation)(HotKeyboard));
 
 module.exports = WrappedKeyboard;
