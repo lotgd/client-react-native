@@ -24,6 +24,7 @@ import ActionTypes from '../constants/ActionTypes';
 import HeadsUpDisplay from './HeadsUpDisplay';
 import HotKeyboard from './HotKeyboard';
 import RootView from './RootView';
+import ViewpointQuery from '../queries/ViewpointQuery';
 
 function hotKeyifyTitle(title, hotKey) {
   let lowerTitle = _.lowerCase(title);
@@ -141,25 +142,6 @@ class Gameplay extends Component {
       );
     }
   }
-
-const ViewpointQuery = gql`
-query ViewpointQuery($id: String!) {
-  viewpoint(characterId: $id) {
-    title,
-    description,
-    template,
-    actionGroups {
-      id,
-      title,
-      sortKey,
-      actions {
-        id,
-        title,
-      }
-    }
-  }
-}
-`;
 
 const WrappedGameplay = graphql(ViewpointQuery, {
   options: ({ navigation }) => ({
