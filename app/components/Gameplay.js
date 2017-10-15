@@ -65,8 +65,6 @@ class Gameplay extends Component {
     } else if (this.props.data.error) {
       view = <Text style={styles.error}>{ this.props.data.error.message }</Text>;
     } else {
-      console.log(this.props.data);
-
       const lines = (
         <Text style={styles.description}>
           { this.props.data.viewpoint.description }
