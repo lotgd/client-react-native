@@ -4,6 +4,8 @@ import QuickKeyboard from './QuickKeyboard';
 import { gql, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 
+import ViewpointQuery from '../queries/ViewpointQuery';
+
 class HotKeyboard extends Component {
   _onAction(value) {
     this.props.mutate({
@@ -13,7 +15,11 @@ class HotKeyboard extends Component {
           'characterId': this.props.characterId,
           'actionId': value
         }
-      }
+      },
+      refetchQueries: [{
+        query: ViewpointQuery,
+        variables: { id: this.props.characterId },
+      }]
     });
   }
 
