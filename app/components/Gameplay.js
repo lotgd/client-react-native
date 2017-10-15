@@ -9,11 +9,10 @@ import React, { Component } from 'react'; import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-import { gql, graphql } from 'react-apollo';
+import { ApolloProvider, compose, gql, graphql } from 'react-apollo';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import { ApolloProvider } from 'react-apollo';
 import {
   Cell,
   Section,
@@ -25,6 +24,7 @@ import HeadsUpDisplay from './HeadsUpDisplay';
 import HotKeyboard from './HotKeyboard';
 import RootView from './RootView';
 import ViewpointQuery from '../queries/ViewpointQuery';
+import TakeActionMutation from '../queries/TakeActionMutation';
 
 function hotKeyifyTitle(title, hotKey) {
   let lowerTitle = _.lowerCase(title);
@@ -55,7 +55,19 @@ class Gameplay extends Component {
   }
 
   _onAction = (id) => {
-    console.log(id);
+    this.props.mutate({
+      variables: {
+        input: {
+          'clientMutationId': 'mutationId',
+          'characterId': this.props.characterId,
+          'actionId': id
+        }
+      },
+      refetchQueries: [{
+        query: ViewpointQuery,
+        variables: { characterId: this.props.characterId },
+      }]
+    });
   }
 
   render() {
@@ -143,13 +155,16 @@ class Gameplay extends Component {
     }
   }
 
-const WrappedGameplay = graphql(ViewpointQuery, {
-  options: ({ navigation }) => ({
-    variables: {
-      characterId: navigation.state.params.characterId
-    }
-  })
-})(connect()(Gameplay));
+const WrappedGameplay = compose(
+  graphql(ViewpointQuery, {
+    options: ({ navigation }) => ({
+      variables: {
+        characterId: navigation.state.params.characterId
+      }
+    }),
+  }),
+  graphql(TakeActionMutation)
+)(connect()(Gameplay));
 
 class GameplayNavigatorShim extends Component {
   static navigationOptions = ({ navigation }) => ({
