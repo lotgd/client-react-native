@@ -25,6 +25,25 @@ import HeadsUpDisplay from './HeadsUpDisplay';
 import HotKeyboard from './HotKeyboard';
 import RootView from './RootView';
 
+function hotKeyifyTitle(title, hotKey) {
+  let lowerTitle = _.lowerCase(title);
+  let lowerHotKey = _.lowerCase(hotKey);
+  let index = lowerTitle.indexOf(lowerHotKey);
+
+  if (index > -1) {
+    let prefix = title.substring(0, index);
+    let key = title.substring(index, index + hotKey.length);
+    let suffix = title.substring(index + hotKey.length);
+    return (
+      <Text>{prefix}<Text style={{fontWeight: 'bold'}}>{key}</Text>{suffix}</Text>
+    );
+  } else {
+    return (
+      <Text>{title}</Text>
+    );
+  }
+}
+
 class Gameplay extends Component {
   constructor(props) {
     super(props);
@@ -79,7 +98,7 @@ class Gameplay extends Component {
                       cellStyle="Basic"
                       titleTextColor="#5291F4"
                       titleTextStyle={ { textAlign: 'center' } }
-                      title={a.title}
+                      title={hotKeyifyTitle(a.title, a.title.slice(0, 1))}
                     />
                   );
                 })
@@ -91,7 +110,7 @@ class Gameplay extends Component {
         const keys = _.flatMap(sortedActionGroups, function(g) {
           return _.map(g.actions, function(a) {
             return {
-              key: a.title.slice(0,1),
+              key: a.title.slice(0, 1),
               value: a.id
             };
           });
