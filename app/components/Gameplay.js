@@ -126,6 +126,7 @@ class Gameplay extends Component {
             <HotKeyboard
               keys={keys}
               realm={this.props.realm}
+              characterId={this.props.characterId}
             />
           </View>
         );
@@ -179,6 +180,7 @@ class GameplayNavigatorShim extends Component {
         <WrappedGameplay
           {...this.props}
           realm={this.props.navigation.state.params.realm}
+          characterId={this.props.navigation.state.params.characterId}
           navigation={this.props.navigation}
         />
       </ApolloProvider>

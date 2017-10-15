@@ -10,7 +10,7 @@ class HotKeyboard extends Component {
       variables: {
         input: {
           'clientMutationId': 'mutationId',
-          'characterId': this.props.realm.session.userId,
+          'characterId': this.props.characterId,
           'actionId': value
         }
       }
