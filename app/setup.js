@@ -23,6 +23,10 @@ global.fetch = function(uri, options, ...args) {
   });
 };
 
+// Ignore the "remote debugger is in background" message, since that's like
+// always :)
+console.ignoredYellowBox = ['Remote debugger'];
+
 var persistor = null;
 
 export function purgeStorage() {
