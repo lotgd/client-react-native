@@ -21,7 +21,7 @@ import {
 
 import ActionTypes from '../constants/ActionTypes';
 import HeadsUpDisplay from './HeadsUpDisplay';
-import HotKeyboard from './HotKeyboard';
+import QuickKeyboard from './QuickKeyboard';
 import RootView from './RootView';
 import ViewpointQuery from '../queries/ViewpointQuery';
 import TakeActionMutation from '../queries/TakeActionMutation';
@@ -136,10 +136,9 @@ class Gameplay extends Component {
               </TableView>
             </ScrollView>
             <HeadsUpDisplay values={hudValues}/>
-            <HotKeyboard
+            <QuickKeyboard
               keys={keys}
-              realm={this.props.realm}
-              characterId={this.props.characterId}
+              onPress={(k) => { this._onAction(k.value); }}
             />
           </View>
         );
