@@ -50,33 +50,44 @@ class Gameplay extends Component {
     super(props);
     this.state = {
       error: null,
-      loading: false,
+      loading: true,
     };
   }
 
   _onAction = (id) => {
+    this.setState({ loading: true });
+
     this.props.mutate({
       variables: {
         input: {
           'clientMutationId': 'mutationId',
           'characterId': this.props.characterId,
-          'actionId': id
+          'actionId': id,
         }
       },
-      refetchQueries: [{
-        query: ViewpointQuery,
-        variables: { characterId: this.props.characterId },
-      }]
+    }).catch((e) => {
+      this.setState({
+        error: e,
+        loading: false
+      });
+    }).then(() => {
+      this.props.data.refetch();
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.loading != this.state.loading) {
+      this.setState({ loading: nextProps.data.loading });
+    }
   }
 
   render() {
     var view = null;
 
-    if (this.props.data.loading) {
+    if (this.state.loading) {
       view = <Text>Loading...</Text>;
-    } else if (this.props.data.error) {
-      view = <Text style={styles.error}>{ this.props.data.error.message }</Text>;
+    } else if (this.state.error) {
+      view = <Text style={styles.error}>{ this.state.error.message }</Text>;
     } else {
       const lines = (
         <Text style={styles.description}>
@@ -145,11 +156,9 @@ class Gameplay extends Component {
       }
 
       return (
-        <ApolloProvider client={this.props.realm.apollo}>
-          <RootView>
-            { view }
-          </RootView>
-        </ApolloProvider>
+        <RootView>
+          { view }
+        </RootView>
       );
     }
   }
