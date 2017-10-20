@@ -90,7 +90,7 @@ function setup(): ReactClass<{}> {
           'Home' :
           'RealmAdd';
         const LotGDNavigatorComponent = LotGDNavigator({
-          initialRouteName: initialRoute
+          initialRouteName: initialRoute,
         });
         return (
           <Provider store={store}>

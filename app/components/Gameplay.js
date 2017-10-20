@@ -1,5 +1,6 @@
 'use strict';
-import React, { Component } from 'react'; import {
+import React, { Component } from 'react';
+import {
   StyleSheet,
   Text,
   View,
@@ -36,11 +37,11 @@ function hotKeyifyTitle(title, hotKey) {
     let key = title.substring(index, index + hotKey.length);
     let suffix = title.substring(index + hotKey.length);
     return (
-      <Text>{prefix}<Text style={{fontWeight: 'bold'}}>{key}</Text>{suffix}</Text>
+      <Text>{ prefix }<Text style={{ fontWeight: 'bold' }}>{ key }</Text>{ suffix }</Text>
     );
   } else {
     return (
-      <Text>{title}</Text>
+      <Text>{ title }</Text>
     );
   }
 }
@@ -87,10 +88,10 @@ class Gameplay extends Component {
     if (this.state.loading) {
       view = <Text>Loading...</Text>;
     } else if (this.state.error) {
-      view = <Text style={styles.error}>{ this.state.error.message }</Text>;
+      view = <Text style={ styles.error }>{ this.state.error.message }</Text>;
     } else {
       const lines = (
-        <Text style={styles.description}>
+        <Text style={ styles.description }>
           { this.props.data.viewpoint.description }
         </Text>
       );
@@ -106,26 +107,24 @@ class Gameplay extends Component {
       const sections = _.map(sortedActionGroups, function(g) {
         return (
           <Section
-            key={g.id}
-            header={g.title}
+            key={ g.id }
+            header={ g.title }
             >
               {
                 _.map(g.actions, function(a) {
                   return  (
                     <Cell
-                      key={a.id}
-                      onPress={() => {
-                        onAction(a.id);
-                      }}
-                      cellStyle="Basic"
-                      titleTextColor="#5291F4"
-                      titleTextStyle={ { textAlign: 'center' } }
-                      title={hotKeyifyTitle(a.title, a.title.slice(0, 1))}
+                      key={ a.id }
+                      onPress={() => { onAction(a.id); }}
+                      cellStyle='Basic'
+                      titleTextColor='#5291F4'
+                      titleTextStyle={{ textAlign: 'center' }}
+                      title={ hotKeyifyTitle(a.title, a.title.slice(0, 1)) }
                     />
                   );
                 })
               }
-            </Section>
+          </Section>
           );
         });
 
