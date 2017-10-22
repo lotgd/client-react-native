@@ -112,6 +112,8 @@ class Gameplay extends Component {
           <Section
             key={ g.id }
             header={ g.title }
+            topSeparator={ false }
+            bottomSeparator={ false }
             >
               {
                 _.map(g.actions, function(a) {

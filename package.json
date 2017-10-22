@@ -15,7 +15,7 @@
     "react": "^16.0.0-alpha.12",
     "react-apollo": "^1.0.0-rc.2",
     "react-native": "^0.48.3",
-    "react-native-tableview-simple": "^0.17.1",
+    "react-native-tableview-simple": "austenmc/react-native-tableview-simple",
     "react-native-vector-icons": "^4.1.1",
     "react-navigation": "^1.0.0-beta.13",
     "react-redux": "^5.0.3",
