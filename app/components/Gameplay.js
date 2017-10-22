@@ -38,7 +38,7 @@ function hotKeyifyTitle(title, hotKey) {
     let key = title.substring(index, index + hotKey.length);
     let suffix = title.substring(index + hotKey.length);
     return (
-      <Text>{ prefix }<Text style={{ fontWeight: 'bold' }}>{ key }</Text>{ suffix }</Text>
+      <Text>{ prefix }<Text style={{ fontWeight: '600' }}>{ key }</Text>{ suffix }</Text>
     );
   } else {
     return (
