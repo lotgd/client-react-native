@@ -24,6 +24,7 @@ import ActionTypes from '../constants/ActionTypes';
 import HeadsUpDisplay from './HeadsUpDisplay';
 import QuickKeyboard from './QuickKeyboard';
 import RootView from './RootView';
+import GameplayHeader from './GameplayHeader';
 import ViewpointQuery from '../queries/ViewpointQuery';
 import TakeActionMutation from '../queries/TakeActionMutation';
 
@@ -90,9 +91,11 @@ class Gameplay extends Component {
     } else if (this.state.error) {
       view = <Text style={ styles.error }>{ this.state.error.message }</Text>;
     } else {
+      const viewpoint = this.props.data.viewpoint;
+
       const lines = (
         <Text style={ styles.description }>
-          { this.props.data.viewpoint.description }
+          { viewpoint.description }
         </Text>
       );
 
@@ -101,7 +104,7 @@ class Gameplay extends Component {
         'EXP': 1000,
       };
 
-      const sortedActionGroups = _.sortBy(this.props.data.viewpoint.actionGroups, [function(o) { return o.sortKey }]);
+      const sortedActionGroups = _.sortBy(viewpoint.actionGroups, [function(o) { return o.sortKey }]);
 
       const onAction = this._onAction;
       const sections = _.map(sortedActionGroups, function(g) {
@@ -140,6 +143,11 @@ class Gameplay extends Component {
         view = (
           <View style={styles.container}>
             <ScrollView>
+              <GameplayHeader
+                back='Home'
+                title={ viewpoint.title }
+                onBack={() => { this.props.navigation.dispatch(NavigationActions.back()); }}
+              />
               <TableView>
                 { lines }
                 { sections }
@@ -176,6 +184,7 @@ const WrappedGameplay = compose(
 class GameplayNavigatorShim extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Gameplay', // TODO: figure out how to set the right title.
+    header: null,
   });
 
   render() {
@@ -202,7 +211,7 @@ const styles = StyleSheet.create({
     color: '#787878',
     paddingLeft: 15,
     paddingRight: 15,
-    paddingTop: 20,
+    paddingTop: 0,
     paddingBottom: 10,
     fontSize: 20,
   },
