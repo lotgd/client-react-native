@@ -22,7 +22,7 @@ import {
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import util from 'util';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Feather';
 
 import RootView  from './RootView';
 import CharacterList from './CharacterList';
@@ -33,10 +33,8 @@ class Home extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Legend of the Green Dragon',
     headerLeft: <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Settings')
-                  }}>
-                    <Icon name="ios-settings" size={30} style={{ marginLeft: 10 }} color="#4F8EF7" />
+                  onPress={() => { navigation.navigate('Settings') }}>
+                    <Icon name="settings" size={22} style={{ marginLeft: 10 }} color="#4F8EF7" />
                 </TouchableOpacity>,
     headerTitleStyle: { fontSize: 15 }
   });
