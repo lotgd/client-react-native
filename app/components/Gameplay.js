@@ -216,6 +216,8 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 10,
     fontSize: 20,
+    fontWeight: '300',
+    lineHeight: 28,
   },
   error: {
     paddingLeft: 15,
