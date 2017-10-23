@@ -104,14 +104,23 @@ class Gameplay extends Component {
         'EXP': 1000,
       };
 
-      const sortedActionGroups = _.sortBy(viewpoint.actionGroups, [function(o) { return o.sortKey }]);
+      const sortedActionGroups = _(viewpoint.actionGroups)
+        .filter(
+          function (o) {
+            return o.actions.length > 0 && o.id != 'lotgd/core/default';
+          }
+        ).sortBy(
+          [function(o) {
+            return o.sortKey
+          }]
+        ).value();
 
       const onAction = this._onAction;
       const sections = _.map(sortedActionGroups, function(g) {
         return (
           <Section
             key={ g.id }
-            header={ g.title }
+            headerComponent={ <Text style={ styles.header }>{ g.title }</Text> }
             topSeparator={ false }
             bottomSeparator={ false }
             >
@@ -208,6 +217,13 @@ module.exports = GameplayNavigatorShim;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    fontSize: 16,
+    paddingBottom: 5,
+    fontWeight: '300',
+    color: '#787878',
+    textAlign: 'center',
   },
   description: {
     color: '#787878',
