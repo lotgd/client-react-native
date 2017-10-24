@@ -30,8 +30,10 @@
     "babel-relay-plugin": "^0.10.0",
     "chai": "^3.5.0",
     "enzyme": "^2.8.1",
+    "enzyme-adapter-react-16": "^1.0.2",
     "graphql": "^0.8.2",
     "mocha": "^3.2.0",
+    "react-dom": "^16.0.0",
     "sync-request": "^3.0.1"
   }
 }
