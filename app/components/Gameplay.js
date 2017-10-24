@@ -23,6 +23,7 @@ import {
 import ActionTypes from '../constants/ActionTypes';
 import HeadsUpDisplay from './HeadsUpDisplay';
 import QuickKeyboard from './QuickKeyboard';
+import FullScreenLoading from './FullScreenLoading';
 import RootView from './RootView';
 import GameplayHeader from './GameplayHeader';
 import ViewpointQuery from '../queries/ViewpointQuery';
@@ -87,7 +88,7 @@ class Gameplay extends Component {
     var view = null;
 
     if (this.state.loading) {
-      view = <Text>Loading...</Text>;
+      view = <FullScreenLoading/>
     } else if (this.state.error) {
       view = <Text style={ styles.error }>{ this.state.error.message }</Text>;
     } else {
