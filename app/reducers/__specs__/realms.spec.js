@@ -21,26 +21,21 @@ describe('realms reducer', () => {
   });
 
   it('should handle REALM_LOGIN', () => {
-    expect(
-      realms({
-        'testUrl': {
-          foo: 'bar',
-        },
-      }, {
-        type: ActionTypes.REALM_LOGIN,
-        url: 'testUrl',
-        session: {
-          foo: 'baz',
-        },
-      })
-    ).to.eql({
+    const r = realms({
       'testUrl': {
         foo: 'bar',
-        session: {
-          foo: 'baz',
-        },
-      }
+      },
+    }, {
+      type: ActionTypes.REALM_LOGIN,
+      url: 'testUrl',
+      session: {
+        foo: 'baz',
+      },
     });
+
+    expect(r['testUrl']).to.have.keys([ 'foo', 'session', 'apollo' ]);
+    expect(r['testUrl']['session']).to.eql({ foo: 'baz' });
+    expect(r['testUrl']['foo']).to.eql('bar');
   });
 
   it('should handle REALM_ADD', () => {
